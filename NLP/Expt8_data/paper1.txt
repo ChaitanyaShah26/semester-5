@@ -1,0 +1,1980 @@
+Received 22 October 2023, accepted 29 November 2023, date of publication 7 December 2023, date of current version 2 February 2024.
+Digital Object Identifier 10.1 109/ACCESS.2023.3340884
+Ethical Frameworks for Machine Learning in
+Sensitive Healthcare Applications
+HASEEB JAVED
+1, (Member, IEEE), HAFIZ ABDUL MUQEET2, (Member, IEEE), TAHIR JAVED3,
+ATIQ UR REHMAN
+4, AND RIZWAN SADIQ5
+1Department of Electrical Engineering, Muhammad Nawaz Sharif University of Engineering and Technology, Multan 66000, Pakistan
+2Department of Electrical Engineering Technology, Punjab Tianjin University of Technology, Lahore 54770, Pakistan
+3Department of Computer Science, National University of Computer and Emerging Sciences (NUCES), Islamabad 44000, Pakistan
+4Artificial Intelligence and Intelligent Systems Research Group, School of Innovation, Design and Engineering, Mälardalen University, 722 20 Västerås, Sweden
+5Department of Computer Science, Central Asian University, Tashkent 111221, Uzbekistan
+Corresponding author: Atiq Ur Rehman (atiq.ur.rehman@mdu.se)
+ABSTRACT The application of Machine Learning (ML) in healthcare has opened unprecedented avenues
+for predictive analytics, diagnostics, and personalized medicine. However, the sensitivity of healthcare
+data and the ethical dilemmas associated with automated decision-making necessitate a rigorous ethical
+framework. This review paper aims to provide a comprehensive overview of the existing ethical frameworks
+that guide ML in healthcare and evaluates their adequacy in ad-dressing ethical challenges. Specifically,
+this article offers an in-depth examination of prevailing ethical constructs that oversee healthcare ML,
+spotlighting pivotal concerns: data protection, in-formed assent, equity, and patient autonomy. Various
+analytical approaches including quantitative metrics, statistical methods for bias detection, and qualitative
+thematic analyses are applied to address these challenges. Insights are further enriched through case studies of
+Clinical Decision Support Systems, Remote Patient Monitoring, and Telemedicine Applications. Each case is
+evaluated against existing ethical frameworks to identify limitations and gaps. Based on our com-prehensive
+review and evaluation, we propose actionable recommendations for evolving ethical guidelines. The paper
+concludes by summarizing key findings and underscoring the urgent need for robust ethical frameworks to
+guide ML applications in sensitive healthcare environments. Future work should focus on the development
+and empirical validation of new ethical frameworks that can adapt to emerging technologies and ethical
+dilemmas in healthcare ML.
+INDEX TERMS Ethical frameworks, machine learning, healthcare applications, data privacy.
+I. INTRODUCTION
+In recent years, Machine Learning (ML) has proven to be a
+transformative force across various sectors, with healthcare
+standing out as one of the most impactful. A plethora of
+research has demonstrated the capability of ML algorithms in
+enhancing diagnostic accuracy, predicting patient outcomes,
+and even automating administrative tasks within healthcare
+systems [1]. Yet, the deployment of these technologies is
+not without ethical implications, which have become a focus
+of growing research interest. However, the integration of
+Machine Learning (ML) into healthcare has accelerated at
+an unprecedented pace, offering transformative solutions that
+range from advanced diagnostic tools to predictive analytics
+The associate editor coordinating the review of this manuscript and
+approving it for publication was Nikhil Padhi
+ .for patient outcomes [2]. The capabilities of ML algorithms to
+process and analyze large, complex datasets offer healthcare
+providers a new set of tools that could revolutionize the
+entire spectrum of patient care. Yet, this promise is shadowed
+by a multitude of ethical considerations that are increas-
+ingly drawing attention within the scientific and medical
+communities [3].
+Data privacy emerges as one of the most urgent ethical
+considerations. Healthcare databases often contain sensitive
+information, ranging from patient demographics to their med-
+ical histories [4]. The depth and breadth of data used in
+training machine learning models are extensive, amplify-
+ing the risks associated with any potential data breach or
+misuse. While there are measures in place like encryption
+and anonymization, these are often not foolproof. Ethi-
+cal frameworks need to address not only how this data
+VOLUME 12, 2024
+2023 The Authors. This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License.
+For more information, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 16233
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+is stored but also how it is accessed and used, ensuring
+that patient confidentiality is always upheld. The fusion
+of Machine Learning (ML) and healthcare technologies is
+nothing short of revolutionary [5]. We are now witness-
+ing an era where computational algorithms can analyze
+complex medical data, offering transformative applications
+that span from improved diagnostic accuracy to automated
+monitoring of patient vitals. In doing so, these technolo-
+gies hold the promise of enhancing the quality of medical
+care while also increasing the efficiency of healthcare
+systems [6].
+Beyond the critical issue of data privacy is the ethical
+challenge of algorithmic fairness and bias. Early imple-
+mentations have shown that machine learning algorithms,
+if trained on biased or unrepresentative data, can lead to
+discriminatory or unequal healthcare outcomes. In the worst
+cases, these algorithms might exacerbate existing healthcare
+disparities by misclassifying certain demographic groups or
+failing to accurately predict medical outcomes [7]. The grav-
+ity of these implications demands rigorous checks on the
+data and the algorithms to ensure fairness and equality in
+healthcare services [8]. Another complex ethical question is
+how much decision-making autonomy should be assigned
+to a machine. The notion of ‘‘algorithmic decision-making’’
+has generated significant discussion in medical ethics circles,
+as the inability of healthcare providers to understand the inner
+workings of complex algorithms might create a ‘‘black box’’
+problem [9].
+In critical healthcare scenarios, this issue could undermine
+the principles of informed consent and shared decision-
+making, considered pillars of ethical healthcare. The debate
+over the ‘‘human-in-the-loop’’ model also forms part of
+this discussion. Should healthcare providers always have the
+final say, even if the algorithm has a statistically higher
+success rate in certain diagnostic or treatment scenarios?
+These ethical questions become even more critical when we
+consider the increasing reliance on remote healthcare ser-
+vices, where machine algorithms may be the first point of
+diagnostic contact [10]. The burgeoning field of research in
+this area has begun to generate ethical frameworks designed
+to navigate these complex issues. Such frameworks often
+aim to offer actionable guidelines for practitioners and
+policymakers alike, spanning topics like data governance,
+algorithmic transparency, and patient autonomy. While these
+frameworks are steps in the right direction, there’s an ongo-
+ing debate over their comprehensiveness and adaptability,
+particularly as machine learning algorithms continue to
+evolve [11].
+As we forge ahead into an era of unprecedented techno-
+logical advancement, the fusion of machine learning (ML)
+with healthcare has become an axis of innovation. Machine
+learning algorithms have penetrated diverse areas of health-
+care, including diagnostics, predictive analytics, and patient
+management. The potential benefits—greater accuracy, effi-
+ciency, and even new capabilities—seem tantalizingly withinreach [12]. Yet, for all its promise, the use of machine
+learning in healthcare raises a host of ethical questions that
+are critical to address. Healthcare data is inherently sensitive,
+often including intimate details about an individual’s physical
+and mental health. As machine learning algorithms become
+more capable of decoding and interpreting this data, questions
+about consent, privacy, and potential misuse become increas-
+ingly pressing [13].
+Ethical frameworks for healthcare-related machine learn-
+ing thus cannot be monolithic; they must be adaptable and
+sensitive to a variety of concerns, including but not limited
+to data ownership, algorithmic transparency, and the poten-
+tial for bias. Importantly, these frameworks should not just
+be theoretical constructs but need practical enforceability.
+Healthcare practitioners, data scientists, policymakers, and
+even the patients themselves should be involved in ethical
+discourse to ensure a comprehensive and actionable ethical
+framework. A robust ethical framework could serve as a
+touchstone for developers and healthcare professionals alike,
+aiding in the responsible advancement and deployment of
+ML in healthcare. Additionally, such frameworks can help
+in setting up guidelines that can be standardized across the
+healthcare sector, fostering an environment of transparency
+and trust [14].
+Previous literature in healthcare machine learning has
+highlighted critical issues such as data privacy, where
+the safeguarding of sensitive patient information against
+breaches remains a top concern. Another predominant chal-
+lenge is informed consent, particularly in the context of using
+patient data for ML applications, where standard consent
+forms may not adequately cover the scope and future use
+of data. Additionally, reviews have consistently pointed out
+the problem of algorithmic bias, emphasizing the need for
+ML models to be free from inherent biases that could lead to
+unequal treatment outcomes. Transparency is another focal
+point, with calls for ML algorithms to be understandable to
+both practitioners and patients, fostering trust in AI-assisted
+decision-making. Finally, accountability in the event of ML
+errors has been a recurring theme, raising the question of who
+bears the responsibility when technology influences clinical
+decisions [15].
+Building upon these identified concerns, the proposed
+review seeks to systematically analyze and map out the effi-
+cacy and gaps within existing ethical frameworks. It will scru-
+tinize how these frameworks address data privacy, proposing
+novel solutions that adapt to emerging threats and vulnerabil-
+ities. This review discusses data protection, informed assent,
+equity, and patient autonomy as central ethical concerns
+that must be addressed by ML applications in healthcare.
+We focused various analytical approaches, including quan-
+titative metrics and statistical methods for bias detection,
+to evaluate how current ethical frameworks handle these
+concerns. Through case studies of Clinical Decision Sup-
+port Systems, Remote Patient Monitoring, and Telemedicine
+Applications, we identify limitations and gaps in existing
+16234 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+FIGURE 1. General architecture of legal and ethical pillars of modern healthcare.
+ethical frameworks. This review paper also proposes rec-
+ommendations for evolving ethical guidelines to bridge the
+identified gaps, particularly focusing on equity to address
+the problems of racial bias and exclusionary practices in
+healthcare ML.
+Therefore, this paper aims to provide a comprehensive and
+critical examination of the ethical landscape that surrounds
+machine learning applications in healthcare. By evaluating
+existing ethical frameworks, analyzing real-world case stud-
+ies, and identifying persistent gaps, we aspire to offer a
+nuanced understanding of the complexities involved. We con-
+tend that without a rigorous ethical review, the vast potential
+of machine learning in healthcare may well remain underuti-
+lized or, worse, could result in unintended ethical violations.
+In the construction of our review paper, we conducted a thor-
+ough literature search across multiple esteemed databases,
+including Scopus, Web of Science, SpringerLink, PubMed,
+IEEE Xplore, and Google Scholar, to ensure a comprehen-
+sive collection of relevant academic and industry contribu-
+tions. To describe the breadth and depth of the intersection
+between ethical frameworks, machine learning, and health-
+care applications, we employed targeted search strings such
+as ‘‘Ethical Frameworks,’’ ‘‘Machine Learning,’’ ‘‘Health-
+care Applications,’’ and ‘‘Data Privacy’’ for our review
+paper.
+The primary objectives of this review paper are:
+1) To provide an overview of the existing ethical frame-
+works that guide the application of ML in healthcare.2) To identify and discuss critical ethical challenges,
+such as data privacy, informed consent, fairness, and
+decision-making autonomy.
+3) To evaluate these frameworks through case studies in
+clinical decision support systems, remote patient mon-
+itoring, and telemedicine applications.
+4) To propose actionable recommendations for refining
+existing ethical guidelines.
+The scope of this paper will focus primarily on peer-
+reviewed literature, real-world case studies, and authoritative
+guidelines and recommendations. While the review will be
+comprehensive, the focus will be on applications and frame-
+works that have garnered significant attention in academic
+and professional communities.
+To guide this review, the following research questions have
+been formulated:
+1) What are the ethical considerations unique to the appli-
+cation of ML in healthcare settings?
+2) How do existing ethical frameworks address these chal-
+lenges, and where do they fall short?
+3) Are there common ethical challenges that emerge
+across different healthcare ML applications?
+4) How can ethical frameworks evolve to better address
+these challenges and gaps?
+By addressing these questions, this paper aims to offer a
+nuanced understanding of the ethical landscape governing
+ML in healthcare and suggest future directions for research
+and policymaking.
+VOLUME 12, 2024 16235
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+II. ETHICAL CHALLENGES IN HEALTHCARE ML
+The amalgamation of machine learning (ML) technologies
+into healthcare promises a transformative shift in medical
+diagnosis, treatment, and patient care. Machine learning algo-
+rithms have the capability to process vast amounts of data,
+make predictive analyses, and even suggest treatment plans,
+all of which have the potential to significantly improve
+healthcare outcomes and operational efficiencies [16]. But
+while the promise of ML in healthcare is extraordinary, so are
+the ethical dilemmas it poses. As we examine this new frontier
+of medicine, ethical concerns have emerged that challenge
+our traditional frameworks for understanding patient privacy,
+consent, fairness, and autonomy [17]. Healthcare data, inher-
+ently sensitive and deeply personal, raises questions about
+who has access to it, under what conditions, and for what
+purposes. Further, the algorithms themselves, despite being
+based on mathematical models, are not completely neutral
+and can perpetuate existing biases present in the data or the
+societal framework [18].
+These ethical challenges are not merely theoretical con-
+siderations but have tangible implications on real-world
+healthcare practices. How do we ensure the privacy and
+security of healthcare data when it is processed by complex
+machine learning models? What does inform consent look
+like when patients are subject to algorithmic rather than solely
+human judgment? How do we address the inherited biases in
+machine learning algorithms, and what do they mean for fair-
+ness in healthcare? Lastly, how do these technologies affect
+the autonomy of patients and healthcare providers in making
+medical decisions? Figure 1delineates key legal tenets, rang-
+ing from data protection regulations to treatment consents,
+and juxtaposes them with overarching ethical principles, such
+as patient autonomy, beneficence, and fairness. As we delve
+deeper into an era where medical interventions are increas-
+ingly augmented by technologies like machine learning and
+artificial intelligence, this figure serves as a crucial roadmap,
+highlighting the vital legal and ethical checkpoints that must
+guide our journey.
+In healthcare, security is of paramount importance, serv-
+ing as the foundation to protect patient data and maintain
+the trust that is foundational to the patient-provider associ-
+ation. Cognitive services must ethically augment care, with
+decisions transparent and understandable. Accountability is
+essential, attributing ML decisions to identifiable and respon-
+sible agents. Transparency ensures the inner workings of
+ML are open for scrutiny, fostering trust and understanding.
+Inclusion is a cornerstone, ensuring ML systems equitably
+serve diverse populations without bias. Thoughtful planning
+for the integration of ML anticipates its long-term healthcare
+impacts. Vigilance against bias is critical, as ML systems can
+reflect and amplify societal prejudices. Finally, the concept
+of robot rights ventures into the ethical standing of AI within
+healthcare, probing the autonomy and rights we might ascribe
+to non-human entities. As we delve deeper into an era where
+medical interventions are increasingly augmented by tech-
+nologies like ML and AI, this figure 1serves as a crucialroadmap, highlighting the vital legal and ethical checkpoints
+that must guide our journey.
+The intersection of machine learning with healthcare also
+warrants scrutiny from a legal and regulatory standpoint.
+Existing laws and regulations, such as the Health Insurance
+Portability and Accountability Act (HIPAA) in the United
+States or the General Data Protection Regulation (GDPR)
+in Europe, offer frameworks for data protection but were
+not initially designed with machine learning applications in
+mind [19]. This disconnect presents a gap that needs to
+be urgently addressed to ensure compliance and to protect
+individual rights. Moreover, the pace at which machine learn-
+ing technologies are advancing far outstrips the speed at
+which ethical guidelines and regulations can be developed
+and implemented [20]. This raises the need for ongoing,
+dynamic ethical considerations that can evolve in tandem
+with the technologies themselves. Static or outdated ethical
+frameworks risk becoming obstacles rather than guides in the
+ethical deployment of machine learning in healthcare [21].
+It is also crucial to consider the impact on healthcare
+practitioners.
+As machine learning systems become increasingly sophis-
+ticated, there’s a potential for these algorithms to make rec-
+ommendations that contradict conventional medical wisdom
+[22]. This creates a complex ethical terrain for practitioners
+who must navigate between algorithmic recommendations
+and established medical guidelines, all while ensuring the
+best outcomes for their patients. In addition to affecting
+medical practitioners and patients, the ethical implications
+of machine learning in healthcare have broader societal
+impacts [23]. There are economic considerations, such as
+the cost of implementing and maintaining these advanced
+technologies, which ultimately could affect healthcare afford-
+ability. There’s also the question of public trust. How will
+public perception of healthcare be shaped if machine learning
+algorithms, even if statistically more reliable, begin to replace
+human judgment in sensitive areas of care?
+A. DATA PRIVACY AND SECURITY
+One of the cornerstone concerns in the deployment of
+machine learning in healthcare is the question of data pri-
+vacy and security. Healthcare data encompasses a wide range
+of information—from patient medical histories to genomic
+data—that is both sensitive and subject to strict regula-
+tory oversight [24]. As machine learning algorithms require
+access to this data to function effectively, concerns arise
+related to the confidentiality, integrity, and availability of
+this data. Unauthorized access, data breaches, and even
+well-intended but poorly executed data-sharing initiatives can
+compromise patient privacy. Moreover, ML algorithms, espe-
+cially deep learning models, often operate as ‘black boxes,’
+making it difficult to ascertain what data is being used and
+how. As we shift our focus to the intricate realm of data
+privacy, it’s crucial to unpack the technical dimensions that
+come into play, particularly within the framework of ’Ethical
+Challenges in Healthcare ML [25].
+16236 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+Machine learning models often require raw data for the
+best performance, but this data usually contains person-
+ally identifiable information (PII) [26]. Techniques like data
+encryption and anonymization have become essential here.
+Data encryption ensures that data is transformed into a code
+to prevent unauthorized access. Anonymization involves the
+removal or modification of personal information from a
+database, rendering it anonymous. However, both methods
+have their limitations [27]. Encrypted data must be decrypted
+for use, exposing it to potential breaches at that stage.
+Anonymization, while effective, can sometimes be reversed,
+especially when combined with other data sources [28]. Dif-
+ferential privacy also aims to provide means to maximize the
+accuracy of queries from statistical databases while minimiz-
+ing the chances of identifying its entries. In machine learning,
+implementing differential privacy ensures that the algorithm
+learns as much as possible about the general population while
+learning as little as possible about any individual in the
+dataset [29]. However, maintaining differential privacy often
+involves adding a form of ‘‘noise’’ to the data, which can
+compromise the algorithm’s performance [30].
+One way to tackle the privacy issue is through feder-
+ated learning, where the model is trained across multiple
+decentralized devices holding local data samples and with-
+out exchanging them. This approach allows for a machine
+learning model to learn from valuable, possibly sensitive,
+distributed data, without moving the data to a central server,
+thus ensuring data privacy [31]. However, federated learning
+is computationally expensive and may not always be practi-
+cal. Another way is homomorphic encryption that allows for
+computations to be conducted on encrypted data, producing
+an encrypted result that, when decrypted, matches the result
+of operations performed on plaintext. This is groundbreaking
+in healthcare applications as it would allow sensitive data to
+be used in computations without ever having to decrypt it,
+providing an extra layer of security [32].
+Implementing strict data access controls can minimize the
+risk of unauthorized data usage. Role-based access control
+(RBAC) or attribute-based access control (ABAC) can ensure
+that only authorized personnel have access to sensitive health-
+care data. Nevertheless, even with strict access controls, the
+risk of insider threats remains. Continuous monitoring and
+auditing of who is accessing the data, and what operations
+are being performed on it, can offer an additional layer of
+security [33]. Automated alert systems can flag unauthorized
+or suspicious activities in real-time, providing an opportunity
+for immediate intervention. Finally, any technical solutions
+for data privacy must also be in compliance with existing laws
+and regulations, such as HIPAA in the United States or GDPR
+in the European Union [34].These regulations often dictate
+the minimum acceptable standards for data privacy and secu-
+rity but navigating their requirements can be complex and
+may require legal advice [35].
+Table 1is a comprehensive table that aims to offer a
+well-rounded understanding of various technical approaches
+for ensuring data privacy in the application of machinelearning in sensitive healthcare settings, along with their
+implications. It explains the comprehensive technical strate-
+gies employed to guarantee data privacy in the integration of
+machine learning within delicate healthcare contexts.
+B. INFORMED CONSENT
+Informed consent is a bedrock principle of medical ethics,
+ensuring that patients are fully aware and agreeable to the
+medical procedures they undergo. However, the introduction
+of machine learning complicates this dynamic significantly.
+Algorithms may analyze patient data and make predictions
+or recommendations that could directly affect patient care,
+raising the question: how do you obtain informed consent
+for an algorithmic decision? The challenge lies not just in
+explaining the implications of data usage but also in convey-
+ing the uncertainties and risks associated with algorithmic
+predictions, a task made even more complicated given the
+often-opaque nature of these algorithms [36].
+One of the major challenges in obtaining informed consent
+for machine learning applications in healthcare is the ‘‘black
+box’’ nature of many algorithms. Even experts in the field can
+find it difficult to fully understand how certain algorithms,
+such as deep neural networks, arrive at specific decisions.
+This opacity can make it incredibly challenging to explain the
+workings of the algorithm to patients in a way that allows for
+truly informed consent [37]. How do we maintain the ethical
+pillar of transparency when the processes we are trying to
+explain are inherently opaque? Traditional informed consent
+is obtained for specific medical procedures or treatments.
+However, machine learning models often use data for mul-
+tiple purposes—diagnostic suggestions, risk prediction, and
+even treatment planning [38]. Each of these might come with
+its set of risks and uncertainties. Thus, the scope of what
+the patient is consenting to can be ambiguous. Is the patient
+consenting only to the collection of their data, or are they
+also implicitly agreeing to future, as-yet-undefined uses of
+that data by the algorithm?
+Machine learning models are probabilistic in nature, which
+means they deal with likelihoods and not certainties. Patients
+must be made aware that the algorithm’s decision is a sta-
+tistical estimate, which could be wrong. Traditional medical
+treatments also come with their share of risks and uncertain-
+ties, but these are often better understood and can be more
+easily communicated to the patient [39]. On the other hand,
+the risks associated with algorithmic decisions can be far
+more nebulous, raising the question of whether patients can
+ever be fully informed. When should informed consent be
+obtained? In traditional settings, consent is usually procured
+before a medical procedure [40].
+However, in the realm of machine learning, algorithms
+may analyze historical patient data for research or to refine
+models. This brings up ethical questions about whether retro-
+spective consent is valid, and if so, how it should be managed.
+Even assuming that the above challenges can be surmounted,
+there remains the issue of varying levels of literacy and under-
+standing among patients. Complex algorithms and statistical
+VOLUME 12, 2024 16237
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+TABLE 1. Comprehensive analysis of data privacy in machine learning for sensitive healthcare applications.
+models are not easily understood without a background in
+mathematics or computer science. There’s a real risk that the
+consent obtained might not be genuinely informed [41].
+Different cultures and societies have varied understandings
+and expectations about privacy and consent. What might be
+considered sufficient disclosure in one setting might not be
+viewed the same way in another. Tailoring informed consent
+to the cultural and social nuances of the patient population
+is another layer of complexity. Laws and regulations like
+HIPAA in the United States or GDPR in Europe have specificrequirements regarding informed consent for data collection
+and processing. However, these laws often do not account
+for the specific challenges posed by machine learning in
+healthcare [42].
+C. FAIRNESS AND BIAS
+The data that machine learning algorithms train on is col-
+lected from the real world and is therefore subject to the same
+biases present in society. These biases can be replicated and
+even amplified when the data is used to train machine learning
+16238 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+models. In healthcare, this raises alarming questions about
+the fairness of these algorithms across different demographic
+groups [43]. For example, if an algorithm is trained on a
+dataset that predominantly features one demographic group,
+its predictions may be less accurate for individuals from
+underrepresented groups, leading to issues of fairness and
+potential discrimination in healthcare provision [44].
+One of the first points of vulnerability to bias in machine
+learning applications for healthcare is the data collection
+stage. Often, the data used to train algorithms can dispro-
+portionately represent certain demographics—be it in terms
+of ethnicity, gender, age, or socio-economic status [45]. This
+skews the algorithm’s predictive capabilities, creating mod-
+els that are less reliable or even misleading when applied
+to underrepresented groups. In a healthcare setting, this
+imbalance could lead to incorrect diagnoses or inappropriate
+treatments, which could have serious, even fatal, conse-
+quences [46].
+Machine learning models are designed to identify patterns
+in data. If the data includes social biases, the algorithm can
+not only replicate these biases but also amplify them. For
+example, if data suggests that a particular demographic is
+less likely to respond well to a certain treatment (because the
+original data was biased), the machine learning algorithm will
+perpetuate this bias, even if it’s not medically valid [47]. Fair-
+ness and bias are not just data issues; they’re also algorithm
+issues. Algorithms differ in their susceptibility to bias and
+their ability to allow for the interpretation of their decision-
+making processes. Complex algorithms, such as deep neural
+networks, may make it difficult to identify the source of any
+biased decisions, complicating efforts to make them more
+equitable [48], [49].
+Healthcare data often includes a variety of non-medical
+information, such as postal codes, that can serve as proxies for
+socioeconomic status. Algorithms trained on this data could
+inadvertently make recommendations that are biased against
+individuals from lower socioeconomic backgrounds [50]. For
+example, suggesting treatments that are less accessible or
+affordable for these individuals. Despite the known issues
+surrounding fairness and bias in machine learning, there’s still
+a lack of standardized ethical guidelines or regulations specif-
+ically targeting these problems in healthcare applications.
+Current legal frameworks may not be sufficient to account
+for the unique challenges posed by machine learning [51].
+Once an algorithm is deployed in a clinical setting, its
+predictions and recommendations have immediate real-world
+implications. Biased algorithms could perpetuate health-
+care inequalities, leading to poorer health outcomes for
+already marginalized communities. This elevates the issue
+of algorithmic bias from a theoretical concern to an urgent
+ethical dilemma with tangible impact [52]. While fairness
+and bias in healthcare machine learning are serious chal-
+lenges, they are also active areas of research. Techniques
+like re-sampling the training data, using different algorithmic
+models, and incorporating fairness constraints into the model
+training process are all under investigation. However, thesetechniques come with their own sets of ethical considerations
+and trade-offs [53].
+Finally, there’s the issue of who is responsible when a
+machine learning model results in biased or unfair healthcare
+outcomes. Is it the developers of the algorithm, the health-
+care providers who use it, or the institutions that oversee
+its deployment? Defining accountability is crucial for ethical
+governance. However, in table 2, it provides a comprehensive
+look at the multiple dimensions involved in fairness and bias
+within the context of machine learning in healthcare [54].
+D. AUTONOMY AND DECISION-MAKING
+Traditionally, medical decisions have been the purview of
+trained healthcare professionals, made in consultation with
+their patients. Machine learning has the potential to disrupt
+this dynamic by contributing a ‘third opinion.’ While algo-
+rithms can aid in decision-making by providing additional
+information or analysis, they also raise concerns about who—
+or what—is ultimately in charge of medical decisions. The
+use of machine learning should be designed to aid, not
+replace, human decision-making and must be carefully man-
+aged to respect the autonomy of both patients and healthcare
+providers [55].
+In the evolving landscape of healthcare, machine learning
+technologies have introduced a new layer of complexity to the
+decision-making processes traditionally held by medical pro-
+fessionals. While these algorithms have the ability to analyze
+vast datasets and provide valuable insights that can improve
+patient outcomes, their integration into healthcare systems
+poses several ethical challenges, especially concerning auton-
+omy and decision-making [56].
+Firstly, there’s the issue of the ‘‘black box’’ nature of many
+machine learning algorithms, particularly deep learning mod-
+els. These algorithms make predictions or suggestions based
+on complex mathematical computations that even experts find
+hard to interpret. This opacity can be a serious hindrance
+in medical settings where transparency in decision-making
+is not only ethical but often legally mandated. A lack of
+understanding of how decisions are made can erode the trust
+between healthcare providers and their patients, thus impact-
+ing patient autonomy [57].
+Secondly, the integration of machine learning models into
+healthcare could inadvertently create a dependency on tech-
+nology at the expense of human expertise. While the goal is to
+use machine learning as a supplementary tool for healthcare
+professionals, there’s a risk that these professionals may start
+to rely too heavily on algorithmic recommendations. This
+poses questions about the autonomy of healthcare providers
+in their practice [58].
+Thirdly, the use of machine learning models can also raise
+questions about informed consent, which is a key aspect of
+patient autonomy. When machine learning is used to aid in
+diagnosis or treatment options, patients must be made aware
+and give their consent. However, the complexity and opacity
+of these algorithms make it difficult for patients to fully
+VOLUME 12, 2024 16239
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+TABLE 2. Multidimensional exploration of fairness and bias in machine learning within healthcare contexts.
+16240 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+TABLE 2. (Continued.) Multidimensional exploration of fairness and bias in machine learning within healthcare contexts.
+understand the implications of their consent, thereby impact-
+ing their ability to make truly autonomous decisions [59].
+Lastly, machine learning algorithms don’t possess ethical
+reasoning and can’t understand the nuances and complex-
+ities of human emotions and values. Human healthcare
+providers consider a variety of factors, including emotional
+and psychological aspects, when making decisions. This
+multidimensional aspect of human decision-making is some-
+thing machine learning models are currently not equipped to
+handle.
+III. ANALYTICAL APPROACHES TO ETHICAL
+CHALLENGES
+The application of machine learning in healthcare comes with
+a slew of ethical challenges that need to be critically analyzed
+for responsible integration into clinical practice. To do so,
+various analytical approaches can be employed, ranging from
+quantitative to qualitative methods, each providing different
+lenses through which to examine these ethical concerns [60].
+This section delves into these analytical paradigms and the
+methods they comprise.
+To navigate this complicated ethical landscape, a multi-
+faceted approach to analysis is crucial. This includes but is
+not limited to, quantitative and qualitative methods, each of
+which offers unique advantages and limitations in dissecting
+these ethical quandaries. Quantitative methods excel in pro-
+viding measurable, specific data points that can be utilized
+to make objective comparisons and evaluations. These are
+particularly useful when assessing risks and benefits in a
+clear-cut manner, such as calculating the probability of data
+breaches or quantifying algorithmic biases across different
+demographic groups [61].
+On the other hand, qualitative methods afford a more
+nuanced understanding, enabling the capture of complex
+social, cultural, and individual factors that may influence
+ethical considerations. Through interviews, surveys, and the-
+matic analyses, qualitative methods offer insights into the
+more intangible aspects of ethics, such as patient perceptions
+of trust, autonomy, or the acceptability of machine-made
+medical decisions [62].While each analytical method has its own merits, a com-
+posite approach that synthesizes both quantitative and quali-
+tative analyses provide a comprehensive lens through which
+the ethical implications of machine learning in healthcare
+can be critically assessed. This multi-pronged methodology
+forms the bedrock of this discussion, serving as an indis-
+pensable tool for researchers, policymakers, and healthcare
+providers committed to ethically responsible innovation in
+healthcare machine learning applications [63].
+In the subsequent sections, we will inquire deeply into
+the analytical methodologies used to assess ethical concerns
+in healthcare machine learning applications. Section III-A
+focuses on quantitative methods, discussing the metrics used
+for ethical assessment and statistical techniques for detecting
+bias. Section III-B shifts the lens to qualitative analysis,
+exploring the role of interviews, surveys, and thematic anal-
+yses in capturing the nuanced perspectives of stakeholders.
+Finally, Section III-C offers a comparative evaluation of these
+methodologies, addressing their limitations and the ethical
+implications arising from the analysis methods themselves.
+A. QUANTITATIVE ANALYSIS
+Quantitative analysis provides a numerical foundation for
+evaluating ethical considerations. Metrics can be developed
+to measure aspects like the degree of data privacy, the ade-
+quacy of informed consent, and the extent of fairness or bias
+in algorithmic outputs. For example, ‘differential privacy’
+metrics can quantify the risk of individual data points being
+reverse engineered from aggregated data. Similarly, ‘fairness
+metrics’ can be employed to determine if an algorithm is
+biased towards a particular demographic [64].
+1) METRICS FOR ETHICAL ASSESSMENT
+The cornerstone of any quantitative approach is the identifi-
+cation and validation of appropriate metrics that can quantify
+ethical attributes or concerns. For instance, metrics could
+be developed to measure the ‘fairness’ of an algorithm
+by assessing its performance across various demographic
+groups. Similarly, rates of false positives and false negatives
+VOLUME 12, 2024 16241
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+in diagnostic algorithms could serve as metrics for its efficacy
+and safety. When it comes to data privacy, quantitative risk
+assessment models can predict the likelihood of data breaches
+or unauthorized access. These metrics not only enable ongo-
+ing monitoring but also provide a means to conduct impact
+assessments when changes are made to algorithms or data
+management protocols [65].
+2) STATISTICAL METHODS FOR BIAS DETECTION
+Statistical methods can be particularly useful for identifying
+and quantifying algorithmic biases. Tests can be designed
+to compare the performance of algorithms across differ-
+ent demographic groups, thereby revealing any disparate
+impacts. Techniques such as hypothesis testing, p-value
+calculations, and confidence intervals can provide robust
+measures for detecting systemic biases in machine learning
+models. Another crucial aspect of quantitative analysis is the
+use of statistical methods to detect and quantify biases in
+machine learning algorithms [66].
+Techniques like disparate impact analysis or odds ratio
+testing can quantify how equitable an algorithm is across
+different demographic groups. This is essential, given that
+biases in healthcare can have life-altering, and sometimes
+life-threatening, implications. Chi-square tests, t-tests, and
+ANOV A can also be used to statistically validate the presence
+of such biases, offering empirical evidence that can then
+be used to re-calibrate algorithms and improve their ethical
+compliance [67].
+By systematically employing these quantitative methods,
+healthcare organizations and policymakers can put algorith-
+mic systems through rigorous ethical scrutiny. This ensures
+not only compliance with legal frameworks like HIPAA and
+GDPR but also aligns the technology with societal values and
+norms. Through rigorous quantitative analysis, areas requir-
+ing ethical improvements can be pinpointed, thereby making
+this approach an indispensable part of responsible machine
+learning deployment in sensitive healthcare applications [68].
+B. QUALITATIVE ANALYSIS
+Qualitative methods offer an alternative yet complementary
+angle for ethical assessment. Interviews and surveys can be
+conducted with both healthcare providers and patients to
+gather perspectives on the ethical implications of machine
+learning in healthcare settings. These methods are valuable
+for capturing the nuances of human experience and ethical
+judgment that quantitative methods might overlook [69].
+1) INTERVIEW AND SURVEY METHODS
+Interviews and surveys provide direct insight into the lived
+experiences and perceptions of those most affected by
+machine learning algorithms in healthcare—patients, health-
+care providers, administrators, and even ethicists. Through
+structured or semi-structured interviews, one can explore
+complex issues like the perception of fairness, the extent to
+which patients feel their privacy is respected, or how muchtrust healthcare providers place in algorithmic support [70].
+Surveys can be a more scalable way to collect such data
+and can be specifically designed to capture attitudes towards
+algorithmic decision-making, data privacy, and other ethical
+considerations. The power of this approach lies in its abil-
+ity to capture the human elements of ethical questions—the
+fears, hopes, and expectations that people have for machine
+learning in healthcare [71].
+2) THEMATIC ANALYSIS OF ETHICAL CONCERNS
+Thematic analysis involves coding and categorizing qual-
+itative data to identify recurring themes related to ethical
+considerations. For instance, a recurring theme in interviews
+might be a lack of trust in algorithmic decision-making or
+concerns about data misuse. This qualitative data can then be
+synthesized to inform ethical frameworks, policy recommen-
+dations, or further quantitative research [72]. Once interviews
+and surveys are conducted, the data needs to be systematically
+analyzed to extract meaningful insights.
+Thematic analysis serves this purpose by identifying pat-
+terns or themes within the qualitative data. Researchers
+code responses, categorize them into themes, and assess
+how these themes address or inform the ethical dimensions
+under study. For instance, one might find recurring concerns
+around patient autonomy or apprehensions about algorithmic
+bias. Thematic analysis helps to condense vast amounts of
+qualitative data into digestible insights that can inform the
+development or refinement of ethical frameworks.
+C. COMPARATIVE EVALUATION
+Each analytical approach has its limitations. Quantitative
+metrics might lack the sensitivity to capture the depth of
+ethical nuance, while qualitative methods may suffer from
+subjectivity and limited generalizability. Understanding these
+limitations is crucial for a comprehensive ethical analy-
+sis[73]. Finally, the methods themselves can have ethical
+implications. For example, poorly designed metrics could
+lead to misleading conclusions about the ethical soundness of
+an algorithm. Moreover, an interview study that lacks demo-
+graphic diversity might result in biased findings. Therefore,
+it’s essential to critically evaluate the ethical implications of
+the analytical methods themselves [74].
+1) METHODOLOGICAL LIMITATIONS
+Analytical methodologies, both quantitative and qualitative,
+are not devoid of limitations when assessing ethical concerns
+in healthcare machine learning. Quantitative metrics often
+provide a standardized and easily interpretable measurement
+but may overlook nuanced ethical dilemmas that do not
+easily translate into numbers [75]. For example, a quantifi-
+able ‘fairness’ metric may show that an algorithm does not
+discriminate on the basis of age, gender, or ethnicity but
+could still be insensitive to other factors like socio-economic
+status or disability, which are equally critical in a healthcare
+context [76].
+16242 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+TABLE 3. Analytical approaches to ethical challenges in machine learning for sensitive healthcare applications: a multidimensional overview.
+VOLUME 12, 2024 16243
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+TABLE 3. (Continued.) Analytical approaches to ethical challenges in machine learning for sensitive healthcare applications: a multidimensional overview.
+On the other hand, qualitative methods, such as inter-
+views and thematic analyses, bring in-depth, context-specific
+insights but may suffer from subjectivity and lack of general-
+izability. A focus group consisting mainly of urban healthcare
+providers may not provide an accurate ethical framework for
+rural healthcare settings, which may have different norms,
+patient expectations, and logistical challenges [72].
+2) ETHICAL IMPLICATIONS OF ANALYSIS METHODS
+The selection and implementation of analysis methods have
+ethical implications that warrant close scrutiny. Utilizing met-
+rics that are ill-suited for the ethical dimensions in question
+can not only lead to misleading conclusions but also per-
+petuate existing inequities. For instance, a poorly designed
+fairness metric might mistakenly validate an algorithm
+as ‘ethical,’ overlooking its adverse impact on minority
+communities [73].
+Similarly, the ethical considerations extend to qualita-
+tive methods as well. If an interview or survey study lacks
+adequate representation from various demographic or profes-
+sional groups, the resulting conclusions may be inherently
+biased. This lack of diversity in perspectives could inad-
+vertently endorse ethical frameworks that do not account
+for the complexities and diversities within healthcare set-
+tings, leading to potentially harmful policies or practices.
+Table 3 aims to provide a comprehensive overview of the
+analytical approaches to ethical challenges in the domain
+of machine learning in healthcare, incorporating example
+metrics to make the evaluation more concrete [74].
+IV. PRACTICAL APPLICATIONS AND CASE INSIGHTS
+The utilization of machine learning in healthcare is not a
+hypothetical endeavor; it’s happening now across various
+domains. This section aims to present an in-depth look at
+some of these practical applications, particularly focusing on
+the ethical dimensions that come into play.
+A. CLINICAL DECISION SUPPORT SYSTEMS
+Clinical Decision Support Systems use machine learning
+algorithms to assist healthcare providers in diagnosing and
+treating diseases. These systems analyze a vast amount of
+medical data—like patient history, lab results, and medical
+images—to offer diagnostic suggestions, treatment options,
+or even predict patient outcomes. For example, IBM’s Wat-
+son can analyze the meaning and context of structured and
+unstructured data in clinical notes and reports [76].1) USE-CASE OVERVIEW
+a: ETHICAL IMPLICATIONS
+The introduction of CDSS brings forth several ethical con-
+cerns. Informed consent becomes complicated when an
+algorithm influences medical decisions. Patients have the
+right to understand how decisions about their healthcare are
+made, but explaining the complexities of machine learning
+algorithms is challenging [77]. There is also the question of
+liability in case of errors and the potential for biases in algo-
+rithmic recommendations, which may be based on historical
+data that underrepresents minority groups [78].
+2) ETHICAL CONSIDERATIONS AND DILEMMAS
+a: ACCOUNTABILITY AND LIABILITY
+Who is responsible when a CDSS makes a wrong recommen-
+dation? Is it the healthcare provider who relied on it, or the
+developers who programmed it?
+b: DATA PRIVACY
+These systems need vast amounts of data to function effec-
+tively. How is patient confidentiality maintained, especially
+when data might be stored in cloud-based systems that could
+be susceptible to breaches?
+c: INFORMED CONSENT
+How do we ensure that patients are fully aware and agreeable
+to machine-driven recommendations, especially when the
+algorithms are too complex to explain to a layperson?
+d: FAIRNESS AND BIAS
+If the training data for these algorithms comes from a specific
+demographic, there is a risk that the system’s recommenda-
+tions could be biased, leading to unequal healthcare delivery.
+e: TRANSPARENCY
+Given that many machine learning algorithms operate as
+‘black boxes,’ their lack of transparency could be a significant
+issue, especially in healthcare where the stakes are high.
+In the context of Clinical Decision Support Systems,
+ethical frameworks play a crucial role in guiding the devel-
+opment, deployment, and governance of these technolo-
+gies[79]. For instance, principles of biomedical ethics can be
+employed to ensure that patient autonomy is respected dur-
+ing the decision-making process. Fair Information Practice
+Principles can guide data privacy measures, and frame-
+works like Ethical Guidelines for Trustworthy AI can offer
+16244 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+a holistic approach to ensure fairness, accountability, and
+transparency [80]. Ensuring that these ethical frameworks are
+effectively integrated into the development and operation of
+CDSS is vital. Given the complexity and potential impact
+of these systems, it’s critical to adopt a multidisciplinary,
+ethical approach that encompasses both healthcare and
+machine learning expertise to navigate the ethical landscape
+successfully [81].
+B. REMOTE PATIENT MONITORING
+The advent of Remote Patient Monitoring (RPM) systems,
+powered increasingly by machine learning algorithms, has
+revolutionized the way healthcare services can be deliv-
+ered. RPM allows for real-time tracking of a wide range
+of health-related metrics, providing both convenience and
+critical information to healthcare providers [78]. The timely
+and precise nature of this data can facilitate early interven-
+tion, which is often key in managing chronic illnesses or
+in post-operative care [82]. Yet, the embedding of machine
+learning within such systems magnifies several ethical con-
+cerns that demand thoughtful consideration in the framework
+of ‘‘Ethical Frameworks for Machine Learning in Sensitive
+Healthcare Applications.’’ In the healthcare landscape, RPM
+(Remote Patient Monitoring) technologies are revolution-
+izing the way we approach chronic disease management.
+While RPM offers unparalleled convenience and real-time
+data, it also presents ethical challenges. Compliance with data
+protection laws like HIPAA (Health Insurance Portability
+and Accountability Act) is critical to ensuring that sensitive
+health information remains secure. Yet, even with HIPAA
+compliance, ethical dilemmas persist, such as issues related to
+informed consent, data misuse, and ensuring equitable access
+to these technologies.
+1) USE-CASE OVERVIEW
+Remote Patient Monitoring (RPM) is a rapidly growing area
+in healthcare that leverages technology to monitor patient
+health data in real-time. Patients use devices that can measure
+various health metrics—such as heart rate, blood pressure,
+and glucose levels—and these devices send that data to
+healthcare providers for analysis [83]. Machine learning
+models can process this information to identify abnormal
+patterns, provide real-time feedback, or even predict potential
+health crises before they happen. The use of RPM has been
+notably effective in managing chronic conditions like dia-
+betes, hypertension, and cardiac illnesses [84]. These systems
+provide an advantage by reducing the need for physical visits,
+thereby easing the healthcare system and providing a more
+immediate and continuous form of patient care [85].
+2) ETHICAL CONSIDERATIONS AND DILEMMAS
+Remote monitoring can be fraught with ethical challenges
+such as data security, patient consent, and ensuring equi-
+table access to technology. The technology’s convenience
+should not come at the expense of compromising sensitivepatient data or excluding marginalized populations from its
+benefits [86]. While RPM technologies offer revolutionary
+changes to healthcare management, they also pose several
+ethical challenges that need thoughtful consideration:
+a: DATA SECURITY
+The first obvious concern is data security. Patients’ health
+information is sensitive and should be protected rigorously.
+As the data gets transmitted wirelessly, there are risks of
+interception or hacking. It’s not just about protecting the data;
+it’s also about ensuring that machine learning algorithms that
+process this data do so in a manner that respects patient
+confidentiality [87].
+b: INFORMED CONSENT
+The patient must be fully aware of what data is being mon-
+itored, how it will be analyzed, and who will have access to
+it. As machine learning algorithms become more complex,
+the ‘informed’ part of informed consent needs to be clearer.
+Patients need to understand that it’s not just humans but also
+algorithms that are analyzing their data, potentially making
+health-related predictions [88].
+c: EQUITABLE ACCESS
+Another ethical concern is the issue of equity. Equity in
+healthcare technology refers to the fair and just distribution of
+its benefits across all societal groups, ensuring that advance-
+ments are accessible and beneficial to diverse populations.
+Not every patient may have access to the high-tech devices
+required for RPM or the Internet bandwidth to transmit the
+data effectively. To mitigate these risks, it is essential to
+develop strategies for RPM deployment that prioritize inclu-
+sivity [89].
+d: AUTONOMY AND SHARED DECISION-MAKING
+RPM can also raise questions about who gets to make
+healthcare decisions. As machine learning algorithms grow
+more sophisticated, there’s a risk that they might overshadow
+the expertise of human healthcare providers or even the
+autonomy of the patients themselves in decision-making pro-
+cesses [90].
+C. TELEMEDICINE APPLICATIONS
+The advent of telemedicine has revolutionized healthcare
+delivery, particularly in a world where physical distanc-
+ing has become crucial. Telemedicine involves the use of
+technology—often advanced software, video conferencing
+tools, and mobile apps—to provide medical consultations that
+would traditionally be conducted in person. This modality
+of healthcare has seen significant advancements with the
+incorporation of machine learning algorithms that can assist
+in diagnostics, treatment planning, and follow-up care. In the
+broader context of our topic, telemedicine applications serve
+as a pivotal practical example that encapsulates multiple
+layers of ethical considerations. While telemedicine offers
+VOLUME 12, 2024 16245
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+unprecedented convenience and accessibility, it also opens
+a new landscape of ethical questions that intersect with the
+capabilities and limitations of machine learning technologies.
+1) USE-CASE OVERVIEW
+In telemedicine, healthcare providers can consult with
+patients remotely, often in real-time, using video conferenc-
+ing platforms or specialized medical applications. Machine
+learning comes into play by aiding healthcare providers
+in analyzing medical images, interpreting patient data,
+or even flagging critical cases that require immediate atten-
+tion [91]. The application of machine learning is not merely
+a technological advancement; it’s an enhancement that can
+significantly affect the quality and efficiency of medical con-
+sultations. For patients who live in remote areas or those
+who cannot travel due to medical conditions, telemedicine
+provides an invaluable solution [92].
+2) ETHICAL CONSIDERATIONS AND DILEMMAS
+Like other digital healthcare solutions, telemedicine raises
+questions about data privacy and the digital divide. Moreover,
+the quality of care in telemedicine must maintain the same
+standards as in-person visits. The responsibility of ethical
+care remains, regardless of the medium through which that
+care is provided [93].
+Each of these practical applications of machine learning
+in healthcare brings with it a unique set of ethical dilem-
+mas that require rigorous analysis within the frameworks
+discussed earlier in this paper. The development of ethical
+guidelines and regulations tailored to each specific applica-
+tion is imperative for the responsible deployment of these
+technologies [94].
+a: DATA PRIVACY
+One of the first ethical considerations is data privacy. The
+same protocols that protect patient information in physical
+settings must be applied or adapted for a digital landscape.
+As machine learning algorithms process sensitive data, the
+imperative for stringent data privacy measures becomes even
+more critical [95].
+b: QUALITY OF CARE
+Telemedicine consultations, assisted by machine learning or
+otherwise, should meet or exceed the standard quality of care
+expected during in-person visits. The algorithms involved
+should be transparent, and the healthcare provider should be
+equipped to overrule machine-based decisions based on their
+expertise and the patient’s specific circumstances [96].
+c: DIGITAL DIVIDE
+The digital divide is an ethical concern, as not everyone
+has access to high-quality internet or the devices neces-
+sary for telemedicine. Machine learning can exacerbate this
+by introducing more advanced technologies that are less
+accessible [97].d: INFORMED CONSENT
+Similar to other healthcare settings, telemedicine must ensure
+that patients are giving informed consent. With the addition
+of machine learning technologies, explaining what kind of
+algorithms will be used and how they will affect patient care
+becomes part of this informed consent [98].
+e: ALGORITHMIC BIAS
+Machine learning algorithms can sometimes be biased, based
+on the data they were trained on. This is particularly troubling
+in a healthcare setting, where such biases can affect the
+quality of care provided through telemedicine platforms.
+However, the application of machine learning in
+telemedicine is a double-edged sword. While it offers numer-
+ous advantages such as increased efficiency and accessibility,
+it also poses new kinds of ethical challenges that need to
+be addressed. The ethical frameworks for machine learning
+in sensitive healthcare applications must be robust enough
+to guide the responsible use of technology in telemedicine,
+ensuring that the care delivered is not only innovative but also
+ethically sound [99].
+V. ETHICAL FRAMEWORKS EVALUATION
+As the application of machine learning in healthcare reaches
+new heights, it is increasingly critical to assess the frame-
+works guiding its ethical deployment. The purpose of this
+evaluation phase is not merely academic; it is fundamentally
+practical and impactful. Various stakeholders, from health-
+care providers to policymakers and patients, are affected
+by the ethical dimensions of machine learning in sensi-
+tive healthcare applications, such as predictive diagnostics,
+treatment planning, and telemedicine. Given this, a com-
+prehensive evaluation of the ethical frameworks that govern
+these machine learning applications is not just a due diligence
+exercise—it’s a moral imperative [100].
+Our evaluation focuses on three key areas—efficacy, com-
+prehensiveness, and applicability. By ‘‘efficacy,’’ we refer
+to the framework’s success in guiding ethical conduct and
+decision-making in real-world applications. ‘‘Comprehen-
+siveness’’ examines the breadth and depth of ethical issues
+the framework addresses, which may range from data privacy
+and confidentiality to fairness and non-discrimination. Lastly,
+‘‘applicability’’ assesses how easily the framework can be
+implemented in various healthcare settings, whether it’s a
+large hospital, a remote telehealth service, or a community
+clinic [101].
+This section aims to dissect these ethical frameworks under
+rigorous scrutiny, applying established evaluation criteria to
+actual case studies from the field of healthcare machine learn-
+ing. Through this, we identify where existing frameworks
+excel and where they fall short, illuminating gaps that need
+to be filled for more robust, ethical applications of machine
+learning technologies in healthcare [102], [103]. By under-
+taking this multifaceted evaluation, we hope to provide a
+resource that aids healthcare professionals, developers, and
+16246 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+regulators in navigating the complex ethical landscape of
+integrating machine learning into sensitive healthcare appli-
+cations. Through this rigorous examination, the objective is to
+propel the field forward, ensuring that technological advance-
+ments serve humanity responsibly and ethically [104].
+However, some notable ethical frameworks that could be
+applied to the domain of machine learning in healthcare.
+The discussion aims to assess the suitability, strengths, and
+limitations of each framework in addressing the unique eth-
+ical challenges posed by the integration of machine learning
+technologies into healthcare applications.
+Principles of Biomedical Ethics - Often condensed to
+four basic ethical principles: autonomy, beneficence, non-
+maleficence, and justice. This framework offers a strong
+foundation for addressing patient-centered ethical issues but
+may lack the specificity needed for technology-related dilem-
+mas. It is highly adequate for patient-related ethics but less so
+for data and technological concerns [105].
+Fair Information Practice Principles (FIPPs) - Focuses
+on data governance, user consent, data minimization, and
+accountability. While extremely relevant to data privacy
+issues, it may not fully address the broader scope of ethical
+issues in healthcare ML, such as clinical implications. It is
+strong in data governance and privacy but weaker in address-
+ing clinical or treatment ethics [106].
+Ethical Guidelines for Trustworthy AI - Proposed by the
+European Commission’s High-Level Expert Group on Arti-
+ficial Intelligence, this framework outlines requirements for
+ethical AI, such as human oversight, fairness, and explica-
+bility. It offers a more holistic approach but still requires
+customization for healthcare applications. It is comprehen-
+sive but needs tailoring for healthcare specifics [107].
+IEEE’s Ethically Aligned Design - A document that aims
+to ensure that developers and policymakers create AI and
+automated systems that remain human-centric [108]. It has
+the benefit of being quite comprehensive, addressing many
+angles from which machine learning could introduce ethical
+issues. It is highly adequate in its comprehensiveness but may
+be too broad and need healthcare-specific details [109].
+Each of these frameworks offers valuable insights but
+also has its limitations when considered in the context of
+healthcare machine learning. Therefore, a hybrid approach,
+combining elements from multiple frameworks, might be the
+most effective strategy to tackle the ethical complexities of
+machine learning in sensitive healthcare applications.
+A. EVALUATION CRITERIA
+Evaluation criteria serve as the yardsticks against which the
+adequacy and efficacy of ethical frameworks are measured.
+These could include:
+•Adaptability: How well does the framework adapt
+to evolving technological capabilities and medical
+practices?
+•Clarity and Understandability: Is the framework
+easy to understand for both medical professionals and
+patients?•Comprehensiveness: Does the framework cover a broad
+range of ethical issues, including but not limited to data
+privacy, fairness, and informed consent?
+•Actionability: How well does the framework guide real-
+world decision-making?
+These criteria form the backbone of a rigorous analytical
+process aimed at determining whether a framework effec-
+tively addresses the multifaceted ethical issues inherent in
+deploying machine learning in healthcare settings [110]. Let’s
+explore these evaluation criteria in detail:
+1) ADAPTABILITY
+The rapidly evolving landscape of technology and medi-
+cal practice necessitates an ethical framework that can be
+adapted over time. Adaptability assesses whether the ethical
+guidelines are designed to be flexible and can accommodate
+future technological innovations and changes in healthcare
+regulations [111]. An adaptable framework would include
+provisions for periodic review, updates, and the inclusion
+of new ethical considerations as they emerge. Without such
+adaptability, a framework may quickly become obsolete, fail-
+ing to guide stakeholders adequately [112].
+2) CLARITY AND UNDERSTANDABILITY
+Ethical guidelines must be accessible and understandable
+to all stakeholders involved, including healthcare providers,
+patients, and even policymakers. The use of jargon, complex
+language, or vague principles can defeat the framework’s
+purpose by creating barriers to understanding and implemen-
+tation. Clear articulation of ethical principles and guidelines,
+accompanied by illustrative examples or case studies, can sig-
+nificantly enhance the framework’s utility. If the framework
+is easily understood, it can be more widely and effectively
+applied, making it a useful tool for day-to-day decision-
+making in healthcare [113].
+3) COMPREHENSIVENESS
+An effective ethical framework should provide a holis-
+tic view that encompasses a wide array of ethical issues.
+This includes not just the obvious concerns like data pri-
+vacy but also nuanced subjects like fairness in algorithmic
+decision-making, informed consent for data usage, and the
+ethical implications of machine learning in clinical diagno-
+sis and treatment plans. A comprehensive framework will
+address these diverse issues by providing detailed guide-
+lines, methodologies, or decision trees for different scenarios.
+Inadequate coverage of such topics can lead to significant
+ethical blind spots, undermining the framework’s overall
+effectiveness [114].
+4) ACTIONABILITY
+For an ethical framework to be practical, it must extend
+beyond theoretical discourse to offer actionable guidance.
+This involves defining a set of actionable steps or protocols
+that healthcare providers and policymakers can follow when
+faced with ethical dilemmas. For example, a framework with
+high actionability might provide a checklist for informed
+VOLUME 12, 2024 16247
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+consent processes, data privacy safeguards, and mechanisms
+for auditing and accountability. A lack of actionability can
+render an ethical framework into a mere academic exercise,
+with limited real-world application [115].
+By using these evaluation criteria, stakeholders can rigor-
+ously assess the value of existing ethical frameworks, identify
+their limitations, and work towards developing more robust,
+relevant, and practical guidelines for the responsible deploy-
+ment of machine learning in healthcare.
+B. APPLICATION TO CASE STUDIES
+For a more robust evaluation, it’s essential to apply the
+framework to practical case studies. Real-world applications
+like Clinical Decision Support Systems (CDSS), Remote
+Patient Monitoring (RPM), and Telemedicine can serve as
+testing grounds. Here, each framework can be analyzed for
+how effectively it navigates ethical quandaries. This helps in
+understanding not just theoretical robustness but also practi-
+cal utility [116].
+Applying ethical frameworks to real-world case studies
+within the healthcare sector is a vital step for gauging
+their effectiveness and practical utility. It moves the eval-
+uation process from the realm of the theoretical to the
+tangible, providing concrete instances to evaluate the adapt-
+ability, clarity, comprehensiveness, and actionability of each
+framework [117]. Let’s focus on these ethical frameworks
+that might apply to some of the emerging technologies in
+healthcare:
+1) CLINICAL DECISION SUPPORT SYSTEMS (CDSS)
+These systems assist healthcare professionals in making deci-
+sions by providing evidence-based treatment options, but they
+may also raise ethical concerns around informed consent, data
+privacy, and algorithmic fairness. The application of ethical
+frameworks here would involve examining whether the CDSS
+adheres to principles such as patient autonomy and data
+security. For example, does the framework offer actionable
+guidance on how to secure explicit informed consent from
+patients for the use of their data? Does it address the potential
+for algorithmic biases in recommending treatments?
+2) REMOTE PATIENT MONITORING (RPM)
+Remote Patient Monitoring is primarily concerned with the
+continuous collection of health data from patients in remote
+locations. Ethical issues often revolve around data security
+and patient privacy. In applying an ethical framework to
+RPM, the focus would be on the framework’s guidelines
+concerning the secure and ethical handling of data. Addition-
+ally, the framework should address equitable access to such
+monitoring technologies, ensuring they are available to all
+socio-economic groups [81].
+3) TELEMEDICINE
+Telemedicine has become increasingly significant, espe-
+cially in light of global pandemics and the need for social
+distancing. Ethical dilemmas may involve the quality of
+remote healthcare and the privacy of patient data. In thiscontext, ethical frameworks should be examined for their
+guidance on maintaining medical standards during remote
+consultations. They should also have robust guidelines on
+securing the digital channels used for doctor-patient commu-
+nication [118].
+By applying ethical frameworks to these case studies,
+we can assess their practical utility. It allows us to observe
+any gaps or limitations in real-time, providing invaluable
+insights into how these frameworks perform when faced
+with actual ethical dilemmas in healthcare settings. This
+exercise can serve as an illuminating acid test, reveal-
+ing whether the frameworks are merely good in theory or
+are genuinely capable of guiding ethical decision-making
+in the complex, rapidly evolving landscape of healthcare
+technology.
+C. LIMITATIONS AND GAPS
+Despite their importance, no ethical framework is without its
+shortcomings. Potential limitations could include:
+•Over- or Under-Specification: Some frameworks may
+be too broad to guide specific actions, while others may
+be too narrow to cover all ethical bases.
+•Lack of Focus on Underrepresented Groups: Not all
+frameworks adequately consider the needs and chal-
+lenges of marginalized or underrepresented populations.
+•Technological Redundancy: As technology evolves,
+certain frameworks may become obsolete if they fail to
+adapt to new challenges and opportunities.
+The identification of these limitations is not just a critique
+but also a roadmap for future research and refinement of
+ethical frameworks in the context of healthcare applications
+of machine learning.
+In the dynamic and multifaceted field of machine learning
+applied to sensitive healthcare applications, ethical frame-
+works are critical for guiding responsible development and
+deployment. However, even the most comprehensive and
+adaptable frameworks have their limitations, which require
+constant evaluation and updating. In this context, let’s explore
+some of these shortcomings in greater detail.
+1) OVER- OR UNDER-SPECIFICATION
+Frameworks that are too broad in scope may lack spe-
+cific guidance for ethical dilemmas that arise in healthcare
+settings. For example, a framework that emphasizes broad
+principles such as fairness and transparency may not offer
+concrete guidance on how to balance these principles when
+faced with competing interests, such as privacy versus trans-
+parency. Conversely, a framework that is too narrow might
+overlook emerging ethical challenges, such as those associ-
+ated with new types of data or methods of data collection and
+analysis.
+2) LACK OF FOCUS ON UNDERREPRESENTED GROUPS
+Healthcare disparities are well-documented, affecting racial
+and ethnic underrepresented groups’, the poor, and other
+16248 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+TABLE 4. Comparative evaluation of ethical frameworks for machine learning in sensitive healthcare applications.
+marginalized groups disproportionately. An ethical frame-
+work that doesn’t explicitly consider these disparities can
+inadvertently perpetuate them. For instance, machine learn-ing models trained on data that is not representative can result
+in algorithms that are biased against certain groups, creating
+a vicious cycle of inequality.
+VOLUME 12, 2024 16249
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+3) TECHNOLOGICAL REDUNDANCY
+As machine learning technology evolves, ethical frameworks
+must adapt to remain relevant and effective. For example,
+early ethical frameworks might not have considered issues
+arising from the use of real-time, continuous data collection
+via wearables or the use of AI in mental health assessments.
+If frameworks don’t evolve, they risk becoming obsolete,
+offering outdated or irrelevant advice.
+The identification of these limitations and gaps is crucial
+for the continued evolution of ethical frameworks in this field.
+Not only do they serve as areas for improvement, but they also
+highlight the directions for future research and development.
+This proactive approach to identifying shortcomings is indis-
+pensable for ensuring that ethical frameworks can adapt to
+the complex and ever-changing landscape of machine learn-
+ing in healthcare. Therefore, scrutinizing these limitations
+isn’t merely a critique; it’s a necessary step in the ongoing
+journey to make machine learning in healthcare as ethical,
+equitable, and effective as possible. Table 4aims to provide a
+quick comparative look at different ethical frameworks, their
+strengths, weaknesses, and applicability to real-world case
+studies within the context of healthcare machine learning.
+The recommendations column suggests avenues for future
+research or modifications to make each framework more
+effective.
+VI. CONCLUSION AND FUTURE RESEARCH
+The intersection of machine learning and healthcare brings
+forth both unparalleled opportunities and ethical challenges.
+Our review underscores the urgency to reconcile the rapid
+advancements in ML with the ethical nuances specific to
+sensitive healthcare applications. The current ethical frame-
+works, while foundationally significant, exhibit limitations
+when addressing issues like data privacy, informed consent,
+fairness, and autonomy in decision-making. Through metic-
+ulous analysis of clinical decision support systems, remote
+patient monitoring, and telemedicine applications, we’ve elu-
+cidated these gaps and limitations.
+A few critical takeaways from our review are:
+1)Data Privacy and Consent: Most existing frameworks
+lack clear guidelines on managing data in cases of
+secondary usage or in scenarios where patient data is
+generated outside traditional medical settings, such as
+wearables.
+2)Fairness and Bias: While there is growing aware-
+ness about bias in machine learning models, healthcare
+poses unique challenges. Biased algorithms in this
+sector can lead to inequitable healthcare outcomes,
+reinforcing existing disparities.
+3)Autonomy in Decision-Making: The balance between
+algorithmic recommendations and clinician exper-
+tise remains a contentious issue. Ethical frameworks
+should guide this synergy, ensuring the human element
+remains central to patient care.
+Future Research: The future of ML in healthcare lies not
+just in refining algorithms but in the careful and ethicallyconscious application of these technologies. Our recommen-
+dations mark a starting point, but the fluidity of technology
+and healthcare dynamics necessitate continuous evolution of
+ethical standards.
+1)Empirical Validation : It is crucial to move beyond
+theoretical propositions and venture into empirical val-
+idation of proposed ethical frameworks. Real-world
+applications and iterative feedback will bolster the
+robustness of these guidelines.
+2)Adaptive Ethical Frameworks: As technology
+evolves, so should our ethical constructs. Future
+work should emphasize frameworks that can adapt in
+real-time to emerging ethical challenges.
+3)Stakeholder Collaboration: The development of
+these frameworks should be a collaborative effort, inte-
+grating insights from clinicians, ethicists, patients, and
+technologists. This collective intelligence will ensure a
+holistic and patient-centric approach to ethical consid-
+erations.
+4)Educational Initiatives: As we pave the way for the
+next generation of healthcare professionals and tech-
+nologists, embedding ethical considerations into their
+training will be paramount. Tailored courses focusing
+on ethics in healthcare ML can ensure a foundation of
+ethical awareness and responsibility.
+The roadmap for addressing the challenges identified in the
+review involves a structured, multi-faceted approach that
+includes an explanation that can be described below:
+1) To ensure the effectiveness of ethical frameworks, they
+must be tested in real-world settings. This involves
+applying the proposed guidelines to actual ML health-
+care applications and collecting data on their impact.
+Feedback from these applications will help refine and
+bolster the frameworks, ensuring they are practical and
+applicable.
+2) Ethical guidelines must be dynamic, evolving with
+technological advances and societal changes. This
+calls for the development of frameworks that are not
+static but can be updated as new ethical dilemmas
+arise. Incorporating mechanisms for regular review and
+amendment will ensure that guidelines remain relevant
+and effective.
+3) Developing robust ethical frameworks is not a task
+for theorists alone; it requires input from all parties
+involved in healthcare ML. This includes clinicians
+who will use the technology, ethicists who understand
+the moral implications, patients who are affected by
+these decisions, and technologists who design and
+implement ML systems. Collaboration ensures that
+frameworks are comprehensive and inclusive of diverse
+perspectives.
+4) To cultivate a culture of ethical awareness, educa-
+tion is key. Integrating ethics into the curriculum for
+healthcare professionals and technologists will ensure
+they are prepared to confront ethical issues. Tailored
+courses and training modules on ethics in healthcare
+16250 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+ML can build a foundation of understanding and
+responsibility.
+Addressing these challenges is an ongoing process, requiring
+commitment across industry and academia. By following this
+roadmap, the field of healthcare ML can progress ethically,
+ensuring advancements benefit all stakeholders without com-
+promising on moral obligations. In end, while ML holds the
+promise of revolutionizing healthcare, it carries an inher-
+ent responsibility. Our hope is that the field recognizes this
+responsibility, ensuring that every technological stride is
+taken with ethical integrity and a commitment to patient
+welfare.
+REFERENCES
+[1] Y. E. G. Vera, R. Dufo-López, and J. L. Bernal-Agustín, ‘‘Energy
+management in microgrids with renewable energy sources: A literature
+review,’’ Appl. Sci., vol. 9, no. 18, p. 3854, Sep. 2019, doi: 10.3390/
+app9183854.
+[2]SUNY New Paltz Combines Clean Energy and Energy Storage to Avoid
+Blackouts, Environ. Amer. Editor, Amer. Website, USA, 2020. [Online].
+Available: https://environmentamerica.org/center/resources/microgrids-
+and-energy-storage/
+[3] M. Silva, F. Fernandes, H. Morais, S. Ramos, and Z. Vale, ‘‘Hour-
+ahead energy resource management in university campus micro-
+grid,’’ in Proc. IEEE Eindhoven PowerTech, Jun. 2015, pp. 1–6, doi:
+10.1109/PTC.2015.7232449.
+[4] V. Machamint, K. Oureilidis, V. Venizelou, V. Efthymiou, and
+G. E. Georghiou, ‘‘Optimal energy storage sizing of a microgrid under
+different pricing schemes,’’ in Proc. IEEE 12th Int. Conf. Compat.,
+Power Electron. Power Eng. (CPE-POWERENG), Apr. 2018, pp. 1–6,
+doi:10.1109/CPE.2018.8372545.
+[5] M. A. Hossain, H. R. Pota, S. Squartini, F. Zaman, and J. M. Guerrero,
+‘‘Energy scheduling of community microgrid with battery cost using
+particle swarm optimisation,’’ Appl. Energy, vol. 254, Nov. 2019,
+Art. no. 113723, doi: 10.1016/j.apenergy.2019.113723.
+[6] L. Hadjidemetriou, L. Zacharia, E. Kyriakides, B. Azzopardi,
+S. Azzopardi, R. Mikalauskiene, S. Al-Agtash, M. Al-Hashem,
+A. Tsolakis, D. Ioannidis, and D. Tzovaras, ‘‘Design factors
+for developing a university campus microgrid,’’ in Proc. IEEE
+Int. Energy Conf. (ENERGYCON), Jun. 2018, pp. 1–6, doi:
+10.1109/ENERGYCON.2018.8398791.
+[7] N. S. Savic, V. A. Katic, N. A. Katic, B. Dumnic, D. Milicevic, and
+Z. Corba, ‘‘Techno-economic and environmental analysis of a microgrid
+concept in the university campus,’’ in Proc. Int. Symp. Ind. Electron.
+(INDEL), Nov. 2018, pp. 1–6, doi: 10.1109/INDEL.2018.8637613.
+[8] S. Bracco, F. Delfino, P. Laiolo, and M. Rossi, ‘‘The smart city energy
+infrastructures at the Savona campus of the university of Genoa,’’ in Proc.
+Int. Annu. Conf. Sustain. Dev. Mediterr. Area, Energy ICT Netw. Future
+(AEIT), 2016, pp. 1–6, doi: 10.23919/AEIT.2016.7892774.
+[9] R. B. Kristiawan, I. Widiastuti, and S. Suharno, ‘‘Technical and econom-
+ical feasibility analysis of photovoltaic power installation on a university
+campus in Indonesia,’’ in Proc. MATEC Web Conf., vol. 197, 2018,
+pp. 1–5, doi: 10.1051/matecconf/201819708012.
+[10] R. M. González, T. A. J. van Goch, M. F. Aslam, A. Blanch, and
+P. F. Ribeiro, ‘‘Microgrid design considerations for a smart-energy uni-
+versity campus,’’ in Proc. IEEE PES Innov. Smart Grid Technol., Eur.,
+Oct. 2014, pp. 1–6, doi: 10.1109/ISGTEUROPE.2014.7028743.
+[11] R. W. Galvin, ‘‘Microgrid project at IIT (Illionois Institue Technology),’’
+IIT Ist., Illinois Tech, Chicago, Tech. Rep., 2019, p. 1. [Online]. Avail-
+able: https://www.iit.edu/microgrid
+[12] V. A. Silva, A. R. Aoki, and G. Lambert-Torres, ‘‘Optimal day-ahead
+scheduling of microgrids with battery energy storage system,’’ Energies,
+vol. 13, no. 19, p. 5188, Oct. 2020, doi: 10.3390/en13195188.
+[13] V. Bertolotti, R. Procopio, A. Rosini, S. Bracco, F. Delfino, C. B. Soh,
+S. Cao, and F. Wei, ‘‘Energy management system for Pulau ubin
+islanded microgrid test-bed in Singapore,’’ in Proc. IEEE Int.
+Conf. Environ. Electr. Eng., IEEE Ind. Commercial Power Syst.
+Eur. (EEEIC/I&CPS Europe), Singapore, Jun. 2020, pp. 1–6, doi:
+10.1109/EEEIC/ICPSEurope49358.2020.9160658.[14] B. Kim, ‘‘25th international conference on electricity distribution paper
+no 0663 implementation and optimal operation of campus microgrid-
+EMS system considering multi-MG power trading 25th international
+conference on electricity distribution Madrid,’’ in Proc. 25th Int. Conf.
+Elect. Distrib., Madrid, Spain, Jun. 2019, pp. 3–6.
+[15] S. Macdonald, ‘‘OpenCommons @ UConn an assessment of renewable
+energy technology implementation in Storrs, Connecticut: Emissions
+reduction and feasibility of a microgrid system at UConn,’’ Univ.
+Connecticut Honors Scholar Thesis, Storrs, Connecticut, USA, Tech.
+Rep., 2020. [Online]. Available: https://opencommons.uconn.edu/
+srhonors_theses/736
+[16] H. Shayeghi, E. Shahryari, M. Moradzadeh, and P. Siano, ‘‘A survey
+on microgrid energy management considering flexible energy sources,’’
+Energies, vol. 12, no. 11, pp. 1–26, Jun. 2019.
+[17] K. Antoniadou-Plytaria, D. Steen, L. A. Tuan, and O. Carlson, ‘‘Energy
+scheduling strategies for grid-connected microgrids: A case study on
+Chalmers campus,’’ in Proc. IEEE PES Innov. Smart Grid Technol. Eur.
+(ISGT-Eur.), 2019, pp. 1–5, doi: 10.1109/ISGTEurope.2019.8905472.
+[18] R. Chedid, A. Sawwas, and D. Fares, ‘‘Optimal design of a univer-
+sity campus micro-grid operating under unreliable grid considering PV
+and battery storage,’’ Energy, vol. 200, Jun. 2020, Art. no. 117510, doi:
+10.1016/j.energy.2020.117510.
+[19] S. För, E. Och, and S. Carneheim, ‘‘Energy storage system for local
+generation in a grid-connected sizing and analyzing an energy storage
+system energy storage system for local generation in a grid-connected
+microgrid,’’ in Proc. ESS Grid-Connect. Microgrid, Stockholm Sverige,
+2020, pp. 1–24.
+[20] D. Let, B. I. Tene, A.-G. Husu, M.-F. Stan, L. M. Stancu, and A. Let,
+‘‘Feasibility of a micro grid scale up at campus level–case study,’’ in
+Proc. 11th Int. Conf. Electron., Comput. Artif. Intell. (ECAI), Jun. 2019,
+pp. 1–6, doi: 10.1109/ECAI46879.2019.9041969.
+[21] M. Husein and I.-Y. Chung, ‘‘Optimal design and financial feasibil-
+ity of a university campus microgrid considering renewable energy
+incentives,’’ Appl. Energy, vol. 225, pp. 273–289, Sep. 2018, doi:
+10.1016/j.apenergy.2018.05.036.
+[22] D. Leskarac, M. Moghimi, J. Liu, W. Water, J. Lu, and S. Stegen, ‘‘Hybrid
+AC/DC microgrid testing facility for energy management in commercial
+buildings,’’ Energy Buildings, vol. 174, pp. 563–578, Sep. 2018, doi:
+10.1016/j.enbuild.2018.06.061.
+[23] M. H. Bellido, L. P. Rosa, A. O. Pereira, D. M. Falcão, and S. K. Ribeiro,
+‘‘Barriers, challenges and opportunities for microgrid implementation:
+The case of Federal University of Rio de Janeiro,’’ J. Cleaner Prod.,
+vol. 188, pp. 203–216, Jul. 2018, doi: 10.1016/j.jclepro.2018.03.012.
+[24] Y. Simmhan, V. Prasanna, S. Aman, S. Natarajan, W. Yin, and Q. Zhou,
+‘‘Toward data-driven demand-response optimization in a campus micro-
+grid,’’ in Proc. 3rd ACM Work. Embedded Sens. Syst. Energy-Efficiency
+Build. Held Conjunction With ACM SenSys (BuildSys) , 2011, pp. 41–42,
+doi:10.1145/2434020.2434032.
+[25] K. N. Kumar, B. Sivaneasan, P. L. So, H. B. Gooi, N. Jadhav, and
+C. Marnay, ‘‘Sustainable campus with PEV and microgrid,’’ in Proc.
+ACEEE Summer, 2012, pp. 128–139.
+[26] M. Shahidehpour, ‘‘Summary of a panel presentation at the 2011 general
+meeting of IEEE/PES: Establishment of campus microgrid for power
+engineering education and research,’’ in Proc. IEEE Power Energy Soc.
+Gen. Meeting, Jul. 2011, p. 1, doi: 10.1109/PES.2011.6039660.
+[27] R. M. González, T. A. J. van Goch, M. F. Aslam, A. Blanch, and
+P. F. Ribeiro, ‘‘Microgrid design considerations for a smart-energy uni-
+versity campus,’’ in Proc. IEEE PES Innov. Smart Grid Technol., Eur.,
+Oct. 2014, pp. 1–6, doi: 10.1109/ISGTEUROPE.2014.7028743.
+[28] H. Talei, B. Zizi, M. R. Abid, M. Essaaidi, D. Benhaddou, and N. Khalil,
+‘‘Smart campus microgrid: Advantages and the main architectural com-
+ponents,’’ in Proc. 3rd Int. Renew. Sustain. Energy Conf. (IRSEC),
+Dec. 2015, pp. 1–7, doi: 10.1109/IRSEC.2015.7455093.
+[29] M. Brenna, F. Foiadelli, M. Longo, S. Bracco, and F. Delfino, ‘‘Smart
+microgrids in smart campuses with electric vehicles and storage systems:
+Analysis of possible operating scenarios,’’ in Proc. IEEE Int. Smart Cities
+Conf. (ISC), Sep. 2016, pp. 1–6, doi: 10.1109/ISC2.2016.7580794.
+[30] H. Dagdougui, L. Dessaint, G. Gagnon, and K. Al-Haddad, ‘‘Modeling
+and optimal operation of a university campus microgrid,’’ in Proc. IEEE
+Power Energy Soc. Gen. Meeting (PESGM), Jul. 2016, pp. 1–5, doi:
+10.1109/PESGM.2016.7741207.
+[31] N.-C. Yang, W.-C. Tseng, and T.-Y. Hsieh, ‘‘Evaluation of max-
+imum installed capacity of electric scooter charging station for
+microgrid in Yuan Ze university campus,’’ in Proc. IEEE 5th
+Global Conf. Consum. Electron. (GCCE), Oct. 2016, pp. 1–2, doi:
+10.1109/GCCE.2016.7800415.
+VOLUME 12, 2024 16251
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+[32] M. Goransson, N. Larsson, L. A. Tuan, and D. Steen, ‘‘Cost-benefit anal-
+ysis of battery storage investment for microgrid of Chalmers university
+campus using µ-OPF framework,’’ in Proc. IEEE Manchester PowerTech,
+Jun. 2017, pp. 1–6, doi: 10.1109/PTC.2017.7981160.
+[33] J. H. Angelim and C. M. Affonso, ‘‘Energy management on university
+campus with photovoltaic generation and BESS using simulated anneal-
+ing,’’ in Proc. IEEE Texas Power Energy Conf. (TPEC), Feb. 2018,
+pp. 1–6, doi: 10.1109/TPEC.2018.8312112.
+[34] A. Arzani, S. Boshoff, P. Arunagirinathan, Maigha, and J. H. Enslin,
+‘‘System design, economic analysis and operation strategy of a campus
+microgrid,’’ in Proc. 9th IEEE Int. Symp. Power Electron. Distrib. Gener.
+Syst. (PEDG), Jun. 2018, pp. 1–7, doi: 10.1109/PEDG.2018.8447652.
+[35] W. Kou, K. Bisson, and S.-Y. Park, ‘‘A distributed demand response
+algorithm and its application to campus microgrid,’’ in Proc.
+IEEE Electron. Power Grid (eGrid), Nov. 2018, pp. 1–6, doi:
+10.1109/EGRID.2018.8598668.
+[36] N. A. Bourahla, M. Benghanem, and H. Bouzeboudja, ‘‘Conception and
+analysis of a photovoltaic microgrid in the USTO campus,’’ in Proc. Int.
+Conf. Electr. Sci. Technol. Maghreb (CISTEM), Oct. 2018, pp. 1–6, doi:
+10.1109/CISTEM.2018.8613489.
+[37] A. Manur, D. Sehloff, and G. Venkataramanan, ‘‘EnerGyan: A portable
+platform for microgrid education, research, and development,’’ in
+Proc. IEEE Int. Conf. Power Electron., Drives Energy Syst. (PEDES),
+Dec. 2018, pp. 1–6, doi: 10.1109/PEDES.2018.8707745.
+[38] M. de Simón-Martín, S. Bracco, M. Rossi, F. Delfino,
+A. González-Martínez, and J. J. Blanes-Peiró, ‘‘A flexible test-bed
+pilot facility for the analysis and simulation of smart microgrids,’’ in
+Proc. IEEE Int. Conf. Environ. Electr. Eng., IEEE Ind. Commercial
+Power Syst. Eur. (EEEIC/I&CPS Europe), Jun. 2019, pp. 1–6, doi:
+10.1109/EEEIC.2019.8783875.
+[39] F. Ahmad and M. S. Alam, ‘‘Optimal sizing and analysis of solar
+PV, wind, and energy storage hybrid system for campus micro-
+grid,’’ Smart Sci., vol. 6, no. 2, pp. 150–157, Apr. 2018, doi:
+10.1080/23080477.2017.1417005.
+[40] Z. Liu, C. Chen, and J. Yuan, ‘‘Hybrid energy scheduling in a renewable
+micro grid,’’ Appl. Sci., vol. 5, no. 3, pp. 516–531, Sep. 2015, doi:
+10.3390/app5030516.
+[41] F. Mundigler, ‘‘Microgrid project in Vienna: Small grid, major impact,’’
+Siemen Website, Munich, Germany, Tech. Rep., 2020. [Online].
+Available: https://new.siemens.com/global/en/company/stories/infra
+structure/2020/microgrid-project-in-vienna.html
+[42] Dongshin University. (2020). Dongshin University Smart
+Energy Campus—Microgrid PRJ . [Online]. Available:
+http://www.nuritelecom.com/service/micro-grid.html
+[43] L. Yavuz, A. Önen, S. M. Muyeen, and I. Kamwa, ‘‘Transformation
+of microgrid to virtual power plant—A comprehensive review,’’ IET
+Gener., Transmiss. Distrib. , vol. 13, no. 11, pp. 1994–2005, Jun. 2019,
+doi:10.1049/iet-gtd.2018.5649.
+[44] S. Cui, Y.-W. Wang, J.-W. Xiao, and N. Liu, ‘‘A two-stage robust
+energy sharing management for prosumer microgrid,’’ IEEE Trans.
+Ind. Informat., vol. 15, no. 5, pp. 2741–2752, May 2019, doi:
+10.1109/TII.2018.2867878.
+[45] H. A. U. Muqeet and A. Ahmad, ‘‘Optimal scheduling for
+campus prosumer microgrid considering price based demand
+response,’’ IEEE Access, vol. 8, pp. 71378–71394, 2020, doi:
+10.1109/ACCESS.2020.2987915.
+[46] S. B. Patra, J. Mitra, and S. J. Ranade, ‘‘Microgrid architecture: A reliabil-
+ity constrained approach,’’ in Proc. IEEE Power Eng. Soc. Gen. Meeting,
+vol. 3, Jun. 2005, pp. 2372–2377, doi: 10.1109/pes.2005.1489500.
+[47] C. Baron, A. S. Al-Sumaiti, and S. Rivera, ‘‘Impact of energy storage
+useful life on intelligent microgrid scheduling,’’ Energies, vol. 13, no. 4,
+p. 957, Feb. 2020, doi: 10.3390/en13040957.
+[48] Y. Parvini, A. Vahidi, and S. A. Fayazi, ‘‘Heuristic versus optimal charg-
+ing of supercapacitors, lithium-ion, and lead-acid batteries: An efficiency
+point of view,’’ IEEE Trans. Control Syst. Technol., vol. 26, no. 1,
+pp. 167–180, Jan. 2018, doi: 10.1109/TCST.2017.2665540.
+[49] ‘‘A microgrid design case study: Synchrophasor placement and develop-
+ment of a protection laboratory for the Oregon state university—Corvallis
+campus,’’ J. Chem. Inf. Model., vol. 53, no. 9, pp. 1689–1699, 2019.
+[50] H. Talei, B. Zizi, M. R. Abid, M. Essaaidi, D. Benhaddou, and N. Khalil,
+‘‘Smart campus microgrid: Advantages and the main architectural com-
+ponents,’’ in Proc. 3rd Int. Renew. Sustain. Energy Conf. (IRSEC),
+Dec. 2015, pp. 1–7, doi: 10.1109/IRSEC.2015.7455093.[51] M. S. Wilfing, ‘‘Integration of solar microgrids,’’ M.S. thesis, Purdue
+Univ., West Lafayette, IN, USA, 2019.
+[52] S. Nigam, ‘‘Quantification of benefits of the campus grid,’’ M.S. thesis,
+Univ. Illinois Urbana-Champaign, Urbana, IL, USA, 2017.
+[53] K. R. Khan, M. S. Siddiqui, Y. A. Saawy, N. Islam, and A. Rahman,
+‘‘Condition monitoring of a campus microgrid elements using smart
+sensors,’’ Proc. Comput. Sci., vol. 163, pp. 109–116, Mar. 2019, doi:
+10.1016/j.procs.2019.12.092.
+[54] F. Iqbal and A. S. Siddiqui, ‘‘Optimal configuration analysis for a campus
+microgrid—A case study,’’ Prot. Control Mod. Power Syst., vol. 2, no. 1,
+2017, Art. no. 23, doi: 10.1186/s41601-017-0055-z.
+[55] A. AbuElrub, F. Hamed, and O. Saadeh, ‘‘Microgrid integrated electric
+vehicle charging algorithm with photovoltaic generation,’’ J. Energy Stor-
+age, vol. 32, Dec. 2020, Art. no. 101858, doi: 10.1016/j.est.2020.101858.
+[56] L. Al-Ghussain, R. Samu, O. Taylan, and M. Fahrioglu, ‘‘Sizing
+renewable energy systems with energy storage systems in micro-
+grids for maximum cost-efficient utilization of renewable energy
+resources,’’ Sustain. Cities Soc., vol. 55, Apr. 2020, Art. no. 102059, doi:
+10.1016/j.scs.2020.102059.
+[57] A. Soman, A. Trivedi, D. Irwin, B. Kosanovic, B. McDaniel, and
+P. Shenoy, ‘‘Peak forecasting for battery-based energy optimizations in
+campus microgrids,’’ in Proc. 11th ACM Int. Conf. Future Energy Syst.,
+Jun. 2020, pp. 237–241, doi: 10.1145/3396851.3397751.
+[58] N. Zhou, N. Liu, J. Zhang, and J. Lei, ‘‘Multi-objective optimal sizing for
+battery storage of PV-based microgrid with demand response,’’ Energies,
+vol. 9, no. 8, pp. 1–24, Jul. 2016, doi: 10.3390/en9080591.
+[59] C. Huang, D. Yue, S. Deng, and J. Xie, ‘‘Optimal scheduling of microgrid
+with multiple distributed resources using interval optimization,’’ Ener-
+gies, vol. 10, no. 3, pp. 1–23, Mar. 2017, doi: 10.3390/en10030339.
+[60] B. Kim, S. Bae, and H. Kim, ‘‘Optimal energy scheduling and transaction
+mechanism for multiple microgrids,’’ Energies, vol. 10, no. 4, p. 566,
+Apr. 2017, doi: 10.3390/en10040566.
+[61] A. C. Uchechukwu, A. C. O. Azubogu, and H. C. Inyiama, ‘‘Modeling
+and simulation of campus solar-diesel hybrid microgrid using Homer
+grid (SPGS Nnamdi Azikiwe university Awka campus as a case study),’’
+Int. J. Eng. Sci., vol. 8, no. 12, pp. 97–108, 2019, doi: 10.9790/1813-
+08120297108.
+[62] H. Masrur, K. R. Khan, W. Abumelha, and T. Senjyu, ‘‘Efficient energy
+delivery system of the CHP-PV based microgrids with the economic
+feasibility study,’’ Int. J. Emerg. Electr. Power Syst., vol. 21, no. 1,
+pp. 1–16, Feb. 2020, doi: 10.1515/ijeeps-2019-0144.
+[63] P. Moura, A. Correia, J. Delgado, P. Fonseca, and A. d. Almeida, ‘‘Univer-
+sity campus microgrid for supporting sustainable energy systems opera-
+tion,’’ in Proc. IEEE/IAS 56th Ind. Commercial Power Syst. Tech. Conf.
+(I&CPS), Jun. 2020, pp. 1–7, doi: 10.1109/ICPS48389.2020.9176755.
+[64] K. S. Saritha, S. Sreedharan, S. R. Anand, and U. Nair, ‘‘Swarm
+intelligence approach for optimum renewable integration of campus
+microgrid—A case study,’’ GMSARN Int. J., vol. 15, pp. 157–165,
+Dec. 2021.
+[65] A. Kumar, A. R. Singh, Y. Deng, X. He, P. Kumar, and R. C. Bansal,
+‘‘Multiyear load growth based techno-financial evaluation of a
+microgrid for an academic institution,’’ IEEE Access, vol. 6,
+pp. 37533–37555, 2018, doi: 10.1109/ACCESS.2018.2849411.
+[66] H.-C. Gao, J.-H. Choi, S.-Y. Yun, H.-J. Lee, and S.-J. Ahn, ‘‘Opti-
+mal scheduling and real-time control schemes of battery energy
+storage system for microgrids considering contract demand and fore-
+cast uncertainty,’’ Energies, vol. 11, no. 6, pp. 1–15, May 2018, doi:
+10.3390/en11061371.
+[67] J. Mitra, S. B. Patra, and S. J. Ranade, ‘‘A dynamic programming based
+method for developing optimal microgrid architectures,’’ in Proc. 15th
+Power Syst. Comput. Conf. (PSCC), Aug. 2005, pp. 22–26.
+[68] W. Liu, C. Liu, Y. Lin, K. Bai, L. Ma, and W. Chen, ‘‘Multi-
+objective optimal scheduling method for a grid-connected redundant
+residential microgrid,’’ Processes, vol. 7, no. 5, p. 296, May 2019, doi:
+10.3390/pr7050296.
+[69] S. Panda and N. K. Yegireddy, ‘‘Multi-input single output SSSC based
+damping controller design by a hybrid improved differential evolution-
+pattern search approach,’’ ISA Trans., vol. 58, pp. 173–185, Sep. 2015,
+doi:10.1016/j.isatra.2015.03.012.
+[70] S. Panda and N. P. Padhy, ‘‘Comparison of particle swarm opti-
+mization and genetic algorithm for FACTS-based controller design,’’
+Appl. Soft Comput., vol. 8, no. 4, pp. 1418–1427, Sep. 2008, doi:
+10.1016/j.asoc.2007.10.009.
+16252 VOLUME 12, 2024
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+[71] M. Neshat, G. Sepidnam, M. Sargolzaei, and A. N. Toosi, ‘‘Artificial
+fish swarm algorithm: A survey of the state-of-the-art, hybridiza-
+tion, combinatorial and indicative applications,’’ Artif. Intell. Rev.,
+vol. 42, no. 4, pp. 965–997, Dec. 2014, doi: 10.1007/s10462-012-
+9342-2.
+[72] M. Motevasel and A. R. Seifi, ‘‘Expert energy management of a
+micro-grid considering wind energy uncertainty,’’ Energy Convers. Man-
+age., vol. 83, pp. 58–72, Jul. 2014, doi: 10.1016/j.enconman.2014.
+03.022.
+[73] N. Shirzadi, F. Nasiri, and U. Eicker, ‘‘Optimal configuration and sizing
+of an integrated renewable energy system for isolated and grid-connected
+microgrids: The case of an Urban University Campus,’’ Energies, vol. 13,
+no. 14, pp. 1–18, 2020.
+[74] V. Marinakis, H. Doukas, J. Tsapelas, S. Mouzakitis, Á. Sicilia,
+L. Madrazo, and S. Sgouridis, ‘‘From big data to smart energy
+services: An application for intelligent energy management,’’
+Future Gener. Comput. Syst., vol. 110, pp. 572–586, Sep. 2020,
+doi:10.1016/j.future.2018.04.062.
+[75] W. L. Filho, A. L. Salvia, A. D. Paço, R. Anholon, O. L. G. Quelhas,
+I. S. Rampasso, A. Ng, A.-L. Balogun, B. Kondev, and L. L. Brandli,
+‘‘A comparative study of approaches towards energy efficiency
+and renewable energy use at higher education institutions,’’
+J. Cleaner Prod., vol. 237, Nov. 2019, Art. no. 117728, doi:
+10.1016/j.jclepro.2019.117728.
+[76] A. Labella, D. Mestriner, R. Procopio, and F. Delfino, ‘‘A simplified first
+harmonic model for the savona campus smart polygeneration microgrid,’’
+inProc. IEEE Int. Conf. Environ. Electr. Eng., IEEE Ind. Commer-
+cial Power Syst. Eur. (EEEIC/I&CPS Europe), Jun. 2017, pp. 1–6, doi:
+10.1109/EEEIC.2017.7977491.
+[77] K. T. Akindeji, R. Tiako, and I. E. Davidson, ‘‘Use of renewable energy
+sources in university campus microgrid – a review,’’ in Proc. Int. Conf.
+Domestic Use Energy (DUE), Mar. 2019, pp. 76–83.
+[78] P. Moura, U. Sriram, and J. Mohammadi, ‘‘Sharing mobile and station-
+ary energy storage resources in transactive energy communities,’’ 2020,
+arXiv:2008.08971.
+[79] I. Mamounakis, D. J. Vergados, P. Makris, E. Varvarigos, and T. Mavridis,
+‘‘A Virtual MicroGrid platform for the efficient orchestration of multiple
+energy prosumers,’’ in Proc. 19th Panhellenic Conf. Inform., vols. 1–3,
+2015, pp. 191–196, doi: 10.1145/2801948.2802012.
+[80] M. Reyasudin Basir Khan, J. Pasupuleti, J. Al-Fattah, and M. Tahmasebi,
+‘‘Optimal grid-connected PV system for a campus microgrid,’’ Indones.
+J. Electr. Eng. Comput. Sci., vol. 12, no. 3, pp. 899–906, 2018, doi:
+10.11591/ijeecs.v12.i3.pp899-906.
+[81] T. Midamerica and R. Microgrid, ‘‘The MidAmerica regional microgrid
+education and training (MARMET),’’ Consortium Missouri Univ. Sci.
+Technol., Long, PI, USA, Tech. Rep. DE-EE0006341, Dec. 2018.
+[82] WP—Leveraging Industry Research to Educate a Future Electric Grid
+Workforce, Electr. Power Res. Inst. (EPRI), USA, 2019, p. 32.
+[83] C. Marnay, N. DeForest, and J. Lai, ‘‘A green prison: The Santa Rita
+Jail campus microgrid,’’ in Proc. IEEE Power Energy Soc. Gen. Meeting,
+Jul. 2012, pp. 1–2, doi: 10.1109/PESGM.2012.6345235.
+[84] S. Bracco, M. Brignone, F. Delfino, and R. Procopio, ‘‘An energy
+management system for the savona campus smart polygeneration micro-
+grid,’’ IEEE Syst. J., vol. 11, no. 3, pp. 1799–1809, Sep. 2017, doi:
+10.1109/JSYST.2015.2419273.
+[85] Y. Lee and J. Kim, ‘‘Analysis of the campus microgrid power demands,’’
+inProc. KIEE Conf. The Korean Institute of Electrical Engineers,
+Apr. 2015, pp. 461–462.
+[86] D. Thomas, G. D’Hoop, O. Deblecker, K. N. Genikomsakis, and
+C. S. Ioakimidis, ‘‘An integrated tool for optimal energy scheduling
+and power quality improvement of a microgrid under multiple demand
+response schemes,’’ Appl. Energy, vol. 260, Feb. 2020, Art. no. 114314,
+doi:10.1016/j.apenergy.2019.114314.
+[87] D. F. Teshome, P. F. Correia, and K. L. Lian, ‘‘Stochastic optimization
+for network-constrained power system scheduling problem,’’ Math. Prob-
+lems Eng., vol. 2015, pp. 1–17, Jan. 2015, doi: 10.1155/2015/694619.
+[88] Y. Zhang and Q. Jia, ‘‘Operational optimization for microgrid of buildings
+with distributed solar power and battery,’’ Asian J. Control, vol. 19, no. 3,
+pp. 996–1008, May 2017, doi: 10.1002/asjc.1424.
+[89] Z. Ji, X. Huang, C. Xu, and H. Sun, ‘‘Accelerated model predictive control
+for electric vehicle integrated microgrid energy management: A hybrid
+robust and stochastic approach,’’ Energies, vol. 9, no. 11, p. 973,
+Nov. 2016, doi: 10.3390/en9110973.[90] Z. Wang, X. Yu, Y. Mu, and H. Jia, ‘‘A distributed peer-to-peer energy
+transaction method for diversified prosumers in urban community micro-
+grid system,’’ Appl. Energy, vol. 260, Feb. 2020, Art. no. 114327, doi:
+10.1016/j.apenergy.2019.114327.
+[91] Y. Luo, S. Itaya, S. Nakamura, and P. Davis, ‘‘Autonomous cooperative
+energy trading between prosumers for microgrid systems,’’ in Proc. 39th
+Annu. IEEE Conf. Local Comput. Netw. Workshops (LCN), Sep. 2014,
+pp. 693–696, doi: 10.1109/LCNW.2014.6927722.
+[92] M. Brenna, F. Foiadelli, M. Longo, S. Bracco, and F. Delfino, ‘‘Sustain-
+able electric mobility analysis in the savona campus of the university of
+Genoa,’’ in Proc. IEEE 16th Int. Conf. Environ. Electr. Eng. (EEEIC),
+Jun. 2016, pp. 1–5, doi: 10.1109/EEEIC.2016.7555562.
+[93] H. Ahmad, A. Ahmad, and S. Ahmad, ‘‘Efficient energy management in a
+microgrid,’’ in Proc. Int. Conf. Power Gener. Syst. Renew. Energy Technol.
+(PGSRET), Sep. 2018, pp. 1–5, doi: 10.1109/PGSRET.2018.8685946.
+[94] Y. Y. Jin, ‘‘Campus microgrid project by LSIS at SNU_News_
+SNU Media_News & Forum_SNU,’’ Seoul Univ., Seoul, South Korea,
+Tech. Rep., 2019. [Online]. Available: https://en.snu.ac.kr/snunow/
+snu_media/news?md=v&bbsidx=126250
+[95] A. Aram, ‘‘Microgrid market in the USA,’’ USA Website, Energy Solu-
+tions Division, Hitachi America, Tech. Rep., 2020, p. 1, vol. 1. [Online].
+Available: https://www.hitachi.com/rev/archive/2017/r2017_05/pdf/P26-
+30_Global.pdf
+[96] M. Ibrahim and A. Alkhraibat, ‘‘Resiliency assessment of micro-
+grid systems,’’ Appl. Sci., vol. 10, no. 5, p. 1824, Mar. 2020, doi:
+10.3390/app10051824.
+[97] M. Yadav, N. Pal, and D. K. Saini, ‘‘Microgrid control, storage,
+and communication strategies to enhance resiliency for survival of
+critical load,’’ IEEE Access , vol. 8, pp. 169047–169069, 2020, doi:
+10.1109/ACCESS.2020.3023087.
+[98] K. Balasubramaniam, P. Saraf, R. Hadidi, and E. B. Makram, ‘‘Energy
+management system for enhanced resiliency of microgrids during
+islanded operation,’’ Electr. Power Syst. Res., vol. 137, pp. 133–141,
+Aug. 2016, doi: 10.1016/j.epsr.2016.04.006.
+[99] N. M. Dehkordi, H. R. Baghaee, N. Sadati, and J. M. Guerrero,
+‘‘Distributed noise-resilient secondary voltage and frequency control
+for islanded microgrids,’’ IEEE Trans. Smart Grid, vol. 10, no. 4,
+pp. 3780–3790, Jul. 2019, doi: 10.1109/TSG.2018.2834951.
+[100] K. P. Schneider, F. K. Tuffner, M. A. Elizondo, C.-C. Liu, Y. Xu, and
+D. Ton, ‘‘Evaluating the feasibility to use microgrids as a resiliency
+resource,’’ IEEE Trans. Smart Grid, vol. 8, no. 2, pp. 687–696, Mar. 2017,
+doi:10.1109/TSG.2015.2494867.
+[101] M. Francesco, L. Calcara, M. Pompili, and S. Sangiovanni, ‘‘Behav-
+ior of transformers interconnecting microgrid and prosumers,’’ in Proc.
+IEEE 20th Int. Conf. Dielectr. Liquids (ICDL) , Jun. 2019, pp. 1–3, doi:
+10.1109/ICDL.2019.8796740.
+[102] S. Yao, P. Wang, and T. Zhao, ‘‘Transportable energy storage for
+more resilient distribution systems with multiple microgrids,’’ IEEE
+Trans. Smart Grid, vol. 10, no. 3, pp. 3331–3341, May 2019, doi:
+10.1109/TSG.2018.2824820.
+[103] S. Yao, P. Wang, and T. Zhao, ‘‘Transportable energy storage for
+more resilient distribution systems with multiple microgrids,’’ IEEE
+Trans. Smart Grid, vol. 10, no. 3, pp. 3331–3341, May 2019, doi:
+10.1109/TSG.2018.2824820.
+[104] Y. Xie, S. Lin, W. Liang, Y. Yang, Z. Tang, Y. Song, and M. Liu, ‘‘Interval
+probabilistic energy flow calculation of CCHP campus microgrid con-
+sidering interval uncertainties of distribution parameters,’’ IEEE Access,
+vol. 8, pp. 141358–141372, 2020, doi: 10.1109/ACCESS.2020.3013151.
+[105] E. Gui, ‘‘Investment planning and institution design for community
+microgrids as a socio-technical energy system,’’ M.S. thesis, School
+Elect. Eng. Telecommun., Faculty Eng., UNSW, Sydney, NSW, Australia,
+Apr. 2019.
+[106] M. Zholbaryssov, D. Fooladivanda, and A. D. Domínguez-García,
+‘‘Resilient distributed optimal generation dispatch for lossy AC micro-
+grids,’’ Syst. Control Lett., vol. 123, pp. 47–54, Jan. 2019, doi:
+10.1016/j.sysconle.2018.10.007.
+[107] P. J. Maliszewski and C. Perrings, ‘‘Factors in the resilience of electrical
+power distribution infrastructures,’’ Appl. Geography, vol. 32, no. 2,
+pp. 668–679, Mar. 2012, doi: 10.1016/j.apgeog.2011.08.001.
+[108] M. A. Gilani, A. Kazemi, and M. Ghasemi, ‘‘Distribution system
+resilience enhancement by microgrid formation considering distributed
+energy resources,’’ Energy, vol. 191, Jan. 2020, Art. no. 116442, doi:
+10.1016/j.energy.2019.116442.
+[109] C. Lo Prete and B. F. Hobbs, ‘‘A cooperative game theoretic analy-
+sis of incentives for microgrids in regulated electricity markets,’’ Appl.
+Energy, vol. 169, pp. 524–541, May 2016, doi: 10.1016/j.apenergy.2016.
+01.099.
+VOLUME 12, 2024 16253
+H. Javed et al.: Ethical Frameworks for ML in Sensitive Healthcare Applications
+[110] M. Nazir, T. Patel, and J. H. Enslin, ‘‘Hybrid microgrid controller analysis
+and design for a campus grid,’’ in Proc. IEEE 10th Int. Symp. Power
+Electron. Distrib. Gener. Syst. (PEDG) , Jun. 2019, pp. 958–963, doi:
+10.1109/PEDG.2019.8807566.
+[111] M. Sufyan, N. Abd Rahim, C. Tan, M. A. Muhammad, and S. R. Sheikh
+Raihan, ‘‘Optimal sizing and energy scheduling of isolated microgrid
+considering the battery lifetime degradation,’’ PLoS ONE, vol. 14, no. 2,
+pp. 1–28, Feb. 2019, doi: 10.1371/journal.pone.0211642.
+[112] F. Sorourifar, V. M. Zavala, and A. W. Dowling, ‘‘Integrated multi-
+scale design, market participation, and replacement strategies for battery
+energy storage systems,’’ IEEE Trans. Sustain. Energy, vol. 11, no. 1,
+pp. 84–92, 2020, doi: 10.1109/TSTE.2018.2884317.
+[113] S. B. Saleh, ‘‘An improved firefly algorithm for optimal microgrid
+operation with renewable energy Shukur Bin Saleh,’’ Ph.D. dissertation,
+Universiti Tun Hussein Onn Malaysia, 2017.
+[114] M. H. Marzebali, M. Mazidi, and M. Mohiti, ‘‘An adaptive droop-based
+control strategy for fuel cell-battery hybrid energy storage system to
+support primary frequency in stand-alone microgrids,’’ J. Energy Storage,
+vol. 27, Feb. 2020, Art. no. 101127, doi: 10.1016/j.est.2019.101127.
+[115] H. A. Muqeet, I. A. Sajjad, A. Ahmad, M. M. Iqbal, S. Ali, and
+J. M. Guerrero, ‘‘Optimal operation of energy storage system for a pro-
+sumer microgrid considering economical and environmental effects,’’ in
+Proc. Int. Symp. Recent Adv. Electr. Eng. (RAEE), vol. 4, Aug. 2019,
+pp. 1–6, doi: 10.1109/RAEE.2019.8887002.
+[116] H. S. V. S. Kumar Nunna, Y. Amanbek, B. Satuyeva, and S. Doolla,
+‘‘A decentralized transactive energy trading framework for prosumers
+in a microgrid cluster,’’ in Proc. IEEE PES GTD Grand Int. Conf.
+Exposit. Asia (GTD Asia), Mar. 2019, pp. 824–830, doi: 10.1109/GTDA-
+SIA.2019.8715872.
+[117] Y. Yang, Q. Ye, L. J. Tung, M. Greenleaf, and H. Li, ‘‘Integrated size and
+energy management design of battery storage to enhance grid integration
+of large-scale PV power plants,’’ IEEE Trans. Ind. Electron., vol. 65, no. 1,
+pp. 394–402, Jan. 2018, doi: 10.1109/TIE.2017.2721878.
+[118] U. Damisa, N. I. Nwulu, and Y. Sun, ‘‘Microgrid energy and reserve
+management incorporating prosumer behind-the-meter resources,’’ IET
+Renew. Power Gener., vol. 12, no. 8, pp. 910–919, Jun. 2018, doi:
+10.1049/iet-rpg.2017.0659.
+[119] T. Kim, W. Qiao, and L. Qu, ‘‘An enhanced hybrid battery model,’’ IEEE
+Trans. Energy Convers., vol. 34, no. 4, pp. 1848–1858, Dec. 2019, doi:
+10.1109/TEC.2019.2935700.
+[120] Z. H. Ali, Z. H. Saleh, R. W. Daoud, and A. H. Ahmed, ‘‘Design and simu-
+lation of a microgrid for TIH campus,’’ Indonesian J. Electr. Eng. Comput.
+Sci., vol. 19, no. 2, p. 729, Aug. 2020, doi: 10.11591/ijeecs.v19.i2.
+pp729-736.
+HASEEB JAVED (Member, IEEE) received the
+B.Sc. degree in electrical engineering from the
+University of Engineering and Technology, Taxila,
+in 2019. He is currently pursuing the M.Sc. degree
+with the Nawaz Sharif University of Engineering
+and Technology, Multan, Pakistan. He is also a
+Research Scholar with the Ph.D. Research Center,
+Electrical Engineering Department, Nawaz Sharif
+University of Engineering and Technology. His
+research interests include energy management in
+microgrids, prosumer markets, and energy storage systems. He is a member
+of several national and international organizations, such as IEEEP and the
+Pakistan Engineering Council (PEC).
+HAFIZ ABDUL MUQEET (Member, IEEE)
+received the B.Sc. degree in electrical engineer-
+ing from B. Z. U. Multan, in 2011, the M.Sc.
+degree in electrical engineering from the Uni-
+versity of Engineering and Technology, Lahore,
+in 2015, and the Ph.D. degree in electrical engi-
+neering from the University of Engineering and
+Technology, Taxila, in 2021. He was a Faculty
+Member with the Institute of Southern Punjab,
+Multan, from 2013 to 2017. He is with the Elec-
+trical Engineering Technology Department, Punjab Tianjin University of
+Technology, Lahore. He is the author of many research articles in reputed
+journals. His research interests include energy management in microgrids,
+prosumer markets, and energy storage systems. He is a member of several
+national and international organizations, such as IEEEP and the Pakistan
+Engineering Council.
+TAHIR JAVED received the M.Sc. degree in com-
+puter science from the National University of
+Computer and Emerging Sciences, in 2021. He has
+recognized for his extensive expertise and experi-
+ence in the information technology and services
+industry. As an accomplished engineer, his skill
+set encompasses a broad range of modern tech-
+nological areas. He is particularly proficient in
+multi-cloud environments and illustrating a deep
+understanding of various cloud platforms and their
+integration. His expertise extends into the realms of DevOps and DevSecOps,
+highlighting his ability to streamline development processes while ensuring
+robust security measures are integrated throughout. His professional journey
+reflects a commitment to staying at the forefront of technology and a dedi-
+cation to implementing efficient, secure, and scalable solutions in complex
+IT environments.
+ATIQ UR REHMAN received the bache-
+lor’s degree (Hons.) in computer engineering
+from COMSATS University Islamabad, Pakistan,
+in 2010, the master’s degree in computer engi-
+neering from the National University of Sciences
+and Technology (NUST), Islamabad, Pakistan,
+in 2013, and the Ph.D. degree in computer sci-
+ence and engineering from Hamad Bin Khalifa
+University, Doha, Qatar, in 2019. Following his
+academic achievements, he embarked on a journey
+as a Postdoctoral Researcher with the College of Science and Engineering,
+Hamad Bin Khalifa University, making significant research contributions,
+from 2019 to 2022. Subsequently, he assumed the role of an Assistant
+Professor with the Department of Electrical and Computer Engineering,
+Pak–Austria Fachhochschule Institute of Applied Sciences and Technol-
+ogy, Haripur, Pakistan. Currently, he is a Postdoctoral Researcher with
+the Artificial Intelligence and Intelligent Systems Research Group, School
+of Innovation, Design, and Engineering, Mälardalen University, Västerås,
+Sweden. His extensive body of work, comprising nearly 50 published
+research articles, revolves around the development of evolutionary compu-
+tation, pattern recognition, and machine learning algorithms. He continues
+to make valuable contributions to the ever-evolving landscape of research in
+these domains.
+RIZWAN SADIQ received the bachelor’s degree
+in computer engineering from COMSATS Univer-
+sity Abbottabad, Pakistan, in 2007, the master’s
+degree in electronic engineering from Interna-
+tional Islamic University, Islamabad, Pakistan,
+in 2011, and the Ph.D. degree in electrical engi-
+neering from Koç University, Istanbul, Turkey,
+in 2020. From 2007 to 2012, he was a Laboratory
+Engineer with International Islamic University.
+From 2012 to 2013, he taught as a Lecturer with
+the Department of Electrical Engineering, COMSATS University Islamabad,
+Abbottabad Campus, Pakistan. In 2021, he joined Qatar Computing Research
+Institute as a Postdoctoral Researcher. He is currently an Assistant Professor
+with the Central Asian University, Tashkent, Uzbekistan. His research inter-
+ests include machine learning, computer vision, natural language processing,
+AI for social good and speech, and signal processing.
+16254 VOLUME 12, 2024

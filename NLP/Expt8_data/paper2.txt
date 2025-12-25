@@ -1,0 +1,1058 @@
+IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025 4213
+Automated Ensemble Multimodal Machine
+Learning for Healthcare
+Fergus Imrie , Stefan Denner , Lucas S. Brunschwig , Klaus Maier-Hein , and Mihaela van der
+Schaar , Fellow, IEEE
+Abstract —The application of machine learning in
+medicine and healthcare has led to the creation of numer-
+ous diagnostic and prognostic models. However, despite
+their success, current approaches generally issue predic-
+tions using data from a single modality. This stands in
+stark contrast with clinician decision-making which em-
+ploys diverse information from multiple sources. While
+several multimodal machine learning approaches exist,
+signiﬁcant challenges in developing multimodal systems
+remain that are hindering clinical adoption. In this paper, we
+introduce a multimodal framework, AutoPrognosis-M, that
+enables the integration of structured clinical (tabular) data
+and medical imaging using automated machine learning.
+AutoPrognosis-M incorporates 17 imaging models, includ-
+ing convolutional neural networks and vision transformers,
+and three distinct multimodal fusion strategies. In an illus-
+trative application using a multimodal skin lesion dataset,
+we highlight the importance of multimodal machine learn-
+ing and the power of combining multiple fusion strategies
+using ensemble learning. We have open-sourced our frame-
+work as a tool for the community and hope it will accelerate
+the uptake of multimodal machine learning in healthcare
+and spur further innovation.
+Index Terms —Automated machine learning,
+biomedicine, cancer, deep learning, healthcare informatics,
+machine learning, medical imaging, multimodal machine
+learning.
+Received 16 August 2024; revised 19 December 2024; accepted 7
+January 2025. Date of publication 15 January 2025; date of current ver-
+sion 6 June 2025. The work of Stefan Denner was supported by “NUM
+2.0“ under Grant FKZ: 01KX2121. (Fergus Imrie and Stefan Denner
+contributed equally to this work.) (Corresponding author: Mihaela van
+der Schaar.)
+Fergus Imrie is with the Department of Statistics, University of Oxford,
+OX1 2JD Oxford, U.K. (e-mail: fergus.imrie@stats.ox.ac.uk).
+Stefan Denner is with the Division of Medical Image Computing,
+German Cancer Research Center (DKFZ), 69120 Heidelberg, Ger-
+many, and also with the Faculty of Mathematics and Computer Sci-
+ence, Heidelberg University, 69117 Heidelberg, Germany (e-mail: ste-
+fan.denner@dkfz-heidelberg.de).
+Lucas S. Brunschwig is with the École Polytechnique Fédérale
+de Lausanne, 1015 Lausanne, Switzerland (e-mail: lucas.brunsch
+wig@epﬂ.ch).
+Klaus Maier-Hein is with the Division of Medical Image Computing,
+German Cancer Research Center (DKFZ), 69120 Heidelberg, Ger-
+many, and with the Pattern Analysis and Learning Group, Depart-
+ment of Radiation Oncology, Heidelberg University Hospital, 69120
+Heidelberg, Germany, and also with the National Center for Tu-
+mor Diseases (NCT) Heidelberg, 69120 Heidelberg, Germany (e-mail:
+k.maier-hein@dkfz-heidelberg.de).
+Mihaela van der Schaar is with the Department of Applied Math-
+ematics and Theoretical Physics, University of Cambridge, CB2 1TN
+Cambridge, U.K. (e-mail: mv472@cam.ac.uk).
+Digital Object Identiﬁer 10.1109/JBHI.2025.3530156I. INTRODUCTION
+HEALTHCARE data is increasingly diverse in origin and
+nature, encompassing patient records and imaging to
+genetic information and real-time biometrics. Machine learning
+(ML) can learn complex relationships from data and has shown
+promise for diagnostic and prognostic modeling [1],[2].H o w -
+ever, such approaches typically only use one type or modality
+of data [3], limiting their ability to consider the broader clinical
+context.
+In contrast, clinicians make decisions based on the synthe-
+sis of information from multiple sources [4], with numerous
+studies showing the absence of such information can result in
+lower performance and decreased clinical utility [5],[6].T h i si s
+perhaps particularly the case in medical imaging. For example,
+almost 90% of radiologists reported that additional clinical in-
+formation was important and could change diagnoses compared
+to imaging alone [7]. Numerous other examples exist across
+many specialties such as ophthalmology [8], pathology [9], and
+dermatology [10].
+Multimodal machine learning integrates multiple types and
+sources of data, offering a more holistic approach that mir-
+rors clinical decision-making processes. While multimodal ML
+remains in its infancy, models that incorporate multiple data
+modalities have been developed in areas such as cardiology [11],
+dermatology [12], oncology [13],[14], and radiology [15].
+However, technical challenges in developing, understanding,
+and deploying multimodal ML systems currently prevent broad
+adoption in medicine beyond bespoke examples.
+One possible solution to these challenges is automated ma-
+chine learning (AutoML) [16]. AutoML can help design power-
+ful ML pipelines by determining the most appropriate modeling
+and hyperparameter choices, while requiring minimal technical
+expertise from the user. To bridge the gap between clinicians
+and cutting-edge ML, we previously proposed an AutoML
+approach, AutoPrognosis [17], for constructing ensemble ML-
+based diagnostic and prognostic models using structured data.
+While AutoPrognosis has been used to develop clinical models
+for a number of outcomes [18],[19],[20],[21],[22],i ti s
+constrained to tabular features. Several other frameworks for
+automated pipeline optimization, such as Auto-sklearn [23],
+Auto-Weka [24], and TPOT [25], suffer the same limitation.
+In this paper, we propose a general-purpose frame-
+work, AutoPrognosis-Multimodal (AutoPrognosis-M), that uses
+AutoML and ensemble learning to construct models that in-
+corporate data from multiple modalities, namely imaging and
+2168-2194 © 2025 IEEE. All rights reserved, including rights for text and data mining, and training of artiﬁcial intelligence and similar technologi es.
+Personal use is permitted, but republication/redistribution requires IEEE permission. See https://www.ieee.org/publications/rights/index. html
+for more information.
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+4214 IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025
+Fig. 1. Overview of the types of questions that can be asked with multimodal machine learning. In addition to developing powerful
+multimodal models (e), multimodal ML can help understand the value of each modality (a), the impact of adding a new modality (b), when an
+additional modality is required (c), and how the information in different modalities interacts (d).
+tabular data. AutoPrognosis-M contains state-of-the-art imaging
+and tabular models and, to the best of our knowledge, is the
+ﬁrst approach to consider multiple multimodal fusion strategies.
+Additionally, AutoPrognosis-M enables such models to be in-
+terrogated with explainable AI (XAI) and provides uncertainty
+estimates using conformal prediction, aiding understanding and
+helping build model trust [26].
+We applied our approach in an illustrative clinical scenario:
+skin lesion diagnosis using both images and clinical features.
+Our experiments demonstrate the beneﬁt of incorporating infor-
+mation from multiple modalities and highlight the impact of the
+multimodal learning strategy on model performance. We show
+different multimodal fusion strategies can be effectively com-
+bined to form ensemble models that substantially outperform
+any individual approach. Additionally, we quantify the value of
+information from each modality and show how our framework
+can be used to determine whether additional data is necessary
+on an individual patient basis.
+While our experiments focus on skin lesion diagnosis, we
+emphasize that AutoPrognosis-M is a general-purpose approach
+that can be applied to any disease or clinical outcome with-
+out requiring substantial ML expertise, and can help answer
+a range of clinical questions (Fig. 1). We have open-sourced
+AutoPrognosis-M to aid the clinical adoption of multimodal ML
+models.
+II. M ETHODS :AUTOPROGNOSIS -M
+AutoPrognosis-M enables clinicians and other users to de-
+velop diagnostic and prognostic models using state-of-the-
+art multimodal ML (Fig. 2). Perhaps the most signiﬁcant
+challenge is the complex design space of model architectures and
+associated hyperparameters, which must be set appropriatelyfor the speciﬁc task and data being considered. Failure to do
+so can signiﬁcantly degrade performance; however, this often
+requires signiﬁcant ML knowledge and expertise. This is further
+compounded in the multimodal setting by the different possible
+ways of integrating data from multiple sources.
+To address this, our framework employs AutoML [24] to
+efﬁciently and effectively search the model and hyperparameter
+space, considering multiple fusion strategies, to construct pow-
+erful ensemble multimodal ML models. While incorporating
+multiple modalities can improve predictive power, this may not
+always be the case or a modality might be particularly expensive
+to acquire. AutoPrognosis-M can optimize both unimodal mod-
+els and multimodal models, allowing the value of each modality
+to be assessed individually and the added value of an additional
+modality to be understood (Fig. 1(a) and(b). Additionally,
+AutoPrognosis-M can identify when more information could
+be required using uncertainty estimation (Fig. 1(c)) and enables
+models to be debugged and understood using explainable AI
+(Fig. 1(d)).
+By automating the optimization of ML pipelines across multi-
+ple modalities and determining the most suitable way of combin-
+ing the information from distinct sources, we reduce the techni-
+cal barrier for non-ML experts, such as clinicians and healthcare
+professionals, to develop multimodal ML models for problems
+in healthcare. We believe that AutoPrognosis-M signiﬁcantly
+simpliﬁes the process of training and validating multimodal ML
+models without compromising on the expressiveness or quality
+of the ML models considered.
+A. Automated Machine Learning
+AutoML aims to simplify and automate the process of de-
+signing and training ML models, thereby reducing the technical
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+IMRIE et al.: AUTOMATED ENSEMBLE MULTIMODAL MACHINE LEARNING FOR HEALTHCARE 4215
+Fig. 2. Overview of AutoPrognosis-M. AutoPrognosis-M leverages automated machine learning to produce multimodal ensembles by optimizing
+state-of-the-art image and tabular modeling approaches across three fusion strategies. AutoPrognosis-M also enables such models to be
+interrogated with explainable AI and provides uncertainty estimates using conformal prediction.
+capabilities required to develop effective models. Human prac-
+titioners have biases about what model architectures or hyperpa-
+rameters will provide the best results for a speciﬁc task. While
+this might be helpful in some cases, often it will not and can cause
+inconsistency in the quality of the ﬁnal predictive system [16].
+AutoML helps minimize these biases by automatically searching
+over a more general set of models, hyperparameters, and other
+design choices to optimize a given objective function, returning
+the best conﬁgurations found. Beyond simply minimizing hu-
+man biases, AutoML reduces the demand for human experts and
+has been shown to typically match or exceed the skilled human
+performance [27].
+B. Unimodal Approaches
+1) T abular: We implemented the tabular component of our
+multimodal framework using AutoPrognosis 2.0 [17]. In con-
+trast to many other approaches for learning from tabular data,
+we consider full ML pipelines , rather than just predictive models,
+consisting of missing data imputation, feature processing, model
+selection, and hyperparameter optimization. AutoPrognosis in-
+cludes 24 classiﬁcation models, nine imputation methods, ﬁve
+dimensionality reduction, and six feature scaling algorithms.
+The classiﬁcation approaches include linear models, such as
+logistic regression [28], tree-based approaches, such as random
+forests [29] and XGBoost [30], and neural networks [31].A d -
+ditionally, we extended the original implementation of Auto-
+Prognosis to incorporate two recent deep learning approaches
+for tabular data, TANGOS [32] and FT-Transformer [33].
+TANGOS [32] introduces a novel regularization for multi-
+layer perceptrons (MLPs) that encourages orthogonalization
+and specialization of latent attributions. FT-Transformer [33]is a transformer adapted for tabular data. A self-attention-based
+transformer is used to process embeddings of categorical and
+continuous features together with a classiﬁcation token, which is
+then passed to a prediction head. The best-performing pipelines
+are combined in an ensemble via either a learned weighting or
+stacking, where a meta-model is trained on the output of the
+underlying pipelines. For further details about AutoPrognosis,
+we refer the reader to Imrie et al. [17]; detailed descriptions
+of the classiﬁcation algorithms can be found in the original
+publications or James et al. [34].
+2) Imaging: For imaging tasks, we employ several distinct
+model architectures to cater to a wide range of diagnostic and
+prognostic applications. Two main classes of deep learning mod-
+els exist for processing images: convolutional neural networks
+(CNNs) [35] and vision transformers (ViTs) [36]. CNNs use
+convolutional layers that exploit local connectivity to extract
+spatial features. Due to the use of shared features and small
+receptive ﬁelds, convolutional layers are relatively parameter ef-
+ﬁcient. ViTs divide images into patches, which are ﬂattened and
+passed to a sequence of transformer layers. The self-attention
+mechanism allows ViTs to learn long-range relationships be-
+tween patches more readily than CNNs. These methods provide
+complementary strengths for image analysis, and thus we in-
+cluded several models from each class. Speciﬁcally, we utilized
+ResNet [37], EfﬁcientNet [38], and MobileNetV2 [39] CNN
+architectures, as well as the standard ViT architecture [36]. Each
+model architecture is available in several sizes to be able to
+handle different task complexities. A full list of the 17 imaging
+models provided, together with additional details, can be found
+in Table III.
+While general-purpose models for tabular data do not exist,
+the transferability of imaging models has been shown in a diverse
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+4216 IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025
+Fig. 3. Illustration of the three types of multimodal fusion. (a)Late fusion combines the predictions of separate unimodal models. (b)Early
+fusion trains a predictive model on the combination of ﬁxed extracted features. (c)Joint fusion ﬂexibly integrates multiple modalities, learning to
+extract representations and make predictions simultaneously in an end-to-end manner.
+range of disciplines [40],[41], and can be particularly effective
+when there is limited available data for a particular problem.
+Pretrained models are especially useful when the available data
+for a speciﬁc task is scarce or when computational resources
+are limited. They allow one to leverage learned features and
+patterns from vast datasets, potentially improving performance
+on related tasks.
+While most models are pretrained in a supervised manner,
+self-supervised pretraining has been shown to improve per-
+formance on many classiﬁcation tasks. Thus, in addition to
+supervised ViT [36], we also consider DINOv2 [42]. DINOv2
+was developed by ﬁrst training a 1B parameter ViT model on
+the LVD-142 M dataset using self-supervised learning and then
+distilling this model into a series of smaller models.
+One approach to using pretrained models is to extract a ﬁxed
+representation and train a new classiﬁcation head on the available
+task-speciﬁc data. However, often these representations are not
+well adapted for the speciﬁc data under consideration, especially
+when transferring from the natural image to the medical image
+domain. In this case, we can train these models further by
+ﬁne-tuning the entire model on the available data. Fine-tuning
+is most important when the target task or domain is related
+but not identical to the one on which the model was originally
+trained by adapting the generalized capabilities of the pretrained
+model to speciﬁc needs without the necessity of training a model
+from scratch. The optimal training strategy depends on the
+speciﬁc task, availability of data, and computational resources.
+AutoPrognosis-M can be used to train vision models from
+scratch, use their existing representations, or ﬁne-tune on the
+available data.
+C. Multimodal Data Integration
+Multimodal ML seeks to effectively integrate multiple types
+of data to enable more accurate predictions than can be obtainedusing any single modality. Modalities can exhibit different rela-
+tionships, including redundancy, depending on the interactions
+between the information contained in each source [43], which
+can additionally vary in complexity. Thus a key challenge is
+discerning the relation between modalities and learning how to
+integrate modalities most effectively.
+Three main multimodal strategies exist [4],[44],[45]:L a t e
+Fusion, Early Fusion, and Joint Fusion (Fig. 3). Multimodal
+architectures can typically be decomposed into two components:
+modality-speciﬁc representations and a joint prediction [43].
+Multimodal learning strategies differ primarily in the nature of
+these components and whether they are jointly or separately
+learned. We incorporated approaches from each fusion strategy
+in AutoPrognosis-M.
+1) Late Fusion: Late fusion is an ensemble-based approach
+that combines predictions from multiple unimodal models, and
+thus is sometimes referred to as decision-level fusion [46]
+(Fig. 3(a)). Each modality is processed independently using a
+modality-speciﬁc model before the predictions are combined.
+This allows the user to ﬁnd the best classiﬁer for each modality
+independently and evaluate whether each modality has predic-
+tive power for the original task. However, this has the drawback
+of not permitting interactions between modalities before the ﬁnal
+output, which could result in suboptimal performance when the
+relationship between modalities is crucial for making accurate
+predictions or decisions. One beneﬁt of late fusion is the ability
+to incorporate new modalities by adding an additional unimodal
+model and retraining only the ensembling step. We implemented
+late fusion using a weighted combination of unimodal tabular
+and imaging models.
+2) Early Fusion: Early fusion necessitates the translation of
+each modality into a representation that can be combined using
+a fusion module, such as concatenation, into a single, uniﬁed
+representation [44](Fig. 3(b)). The combined representation is
+then used as input to train a separate predictive model.
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+IMRIE et al.: AUTOMATED ENSEMBLE MULTIMODAL MACHINE LEARNING FOR HEALTHCARE 4217
+TABLE I
+UNIMODAL SKINLEGION CLASSIFICATION PERFORMANCE
+TABLE II
+SKINLEGION CLASSIFICATION PERFORMANCE
+Compared to late fusion, early fusion allows interactions
+between different modalities to be captured by the predictive
+model. However, the representations are ﬁxed and translating
+different data types into effective (latent) representations to form
+a uniﬁed representation can be challenging, especially when
+dealing with heterogeneous data sources with differing scales,
+dimensions, or types of information.For image data, a common strategy is to use an intermediate
+(or the last) layer of a vision model that was either trained to solve
+the relevant prediction task or a general-purpose imaging model.
+For tabular data, especially if the number of features is relatively
+modest, the representation step can be skipped and the original
+features are directly combined with the latent representations
+extracted from the other modalities. We used concatenation to
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+4218 IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025
+combine the imaging and tabular features and trained a fully
+connected neural network on this representation.
+3) Joint Fusion: The ﬁxed, independent representations used
+in early fusion may not capture relevant factors for the joint
+prediction task. Joint fusion [4](or intermediate fusion [45])
+aims to improve these representations using joint optimization
+to enable both cross-modal relationships and modality-speciﬁc
+features to be learned using end-to-end training (Fig. 3(c)). The
+added ﬂexibility of joint fusion can come at the cost of potentially
+overﬁtting, especially in the limited data setting.
+The most popular approaches for joint fusion use differen-
+tiable unimodal models to produce latent representations that
+are combined via concatenation and passed to a prediction head.
+The system is then trained in an end-to-end manner, either
+from scratch or using pretrained unimodal models. We imple-
+mented joint fusion similarly to early fusion, except we trained
+end-to-end.
+D. Fusion Ensembles
+One major challenge is determining which fusion approach is
+best. Further, no individual fusion approach may be universally
+best for all patients. Ensembling has repeatedly been shown to
+improve performance, even when multiple copies of the same
+model are trained, but can be particularly beneﬁcial when dif-
+ferent approaches are combined due to the increased diversity of
+predictions [47]. The three fusion approaches learn to combine
+the information from multiple modalities in distinct ways. Thus,
+combining these different strategies via an ensembling approach
+could improve both the absolute performance and the robustness
+of the ﬁnal model.
+We combined the best-performing unimodal and multimodal
+fusion approaches in a weighted ensemble as follows. We seek
+to optimize the following objective:
+argmax
+wEx,y∼pXY/bracketleftBigg
+ρ/parenleftbigg/summationdisplay
+iwifi(x),y/parenrightbigg/bracketrightBigg
+subject to/summationdisplay
+iwi=1,wi∈[0,1],
+whereρis a quantitative measure of performance, fiare the
+prediction pipelines that will form the ensemble, and wiare
+the ensemble weights for each pipeline. In practice, it is not
+possible to optimize this expectation directly since we do not
+have access to the true joint distribution pXY. Instead, we
+empirically optimized the objective with respect to a validation
+datasetDval={(xi,yi)}n
+i=1, determining the ensemble weights
+wiusing Bayesian optimization, speciﬁcally a tree-structured
+Parzen estimator with 50 trials implemented using Optuna [48].
+We constructed an ensemble for each modality and multimodal
+fusion approach using the above procedure. We refer to the
+multi-ensemble of unimodal models and multimodal fusion
+models as AutoPrognosis-M in our experiments.
+E. Explainability
+Models must be thoroughly understood and debugged to
+validate the underlying logic of the model, engender model trustfrom both clinical users and patients [26], and satisfy regulatory
+requirements prior to clinical use [49]. This is particularly true in
+the multimodal setting, where we wish to understand what infor-
+mation is being used from each modality and for which patients
+each modality is contributing to the model output. Consequently,
+AutoPrognosis-M contains multiple classes of explainability
+techniques to enable ML models to be better understood. We
+have included feature-based interpretability methods, such as
+SHAP [50] and Integrated Gradients [51], that allow us to
+understand the importance of individual features, as well as
+an example-based interpretability method, SimplEx [52], that
+explains the model output for a particular sample with examples
+of similar instances, similar to case-based reasoning.
+F . Uncertainty Estimation
+Quantifying the uncertainty of predictions is another critical
+component in engendering model trust with clinicians and pa-
+tients, and can be used both to protect against likely inaccurate
+predictions and inform clinical decision-making [53],[54].W e
+adopted the conformal prediction framework, which produces
+statistically valid prediction intervals or sets for any underlying
+predictor while making minimal assumptions and capturing the
+total uncertainty of predictions [55]. We used inductive confor-
+mal prediction [56], which uses a calibration set to determine
+the width of prediction intervals or the size of the prediction
+sets, with local adaptivity to adjust the interval or set to the
+speciﬁc example [57],[58],[59]. For our experiments, we used
+regularized adaptive prediction sets [60]. Further details can be
+found in Appendix F.
+III. E XPERIMENTS
+We demonstrate the application of AutoPrognosis-M to mul-
+timodal healthcare data with the example of skin lesion diag-
+nosis. This process is inherently multimodal, with primary care
+physicians, dermatologists, or other clinicians using multiple
+factors to determine a diagnosis. Visual inspection has formed
+a crucial element, for example the “ABCD” rule or the ELM
+7-point checklist [63]. These approaches have been reﬁned to
+include other characteristics beyond the appearance of the lesion
+at a single point in time, such as evolution [64]. Beyond visual
+examination, clinicians also consider medical history and other
+factors, such as itching and bleeding [10].
+A. Data and Experimental Setup
+Experiments were conducted using PAD-UFES-20 [65].T h e
+dataset contains 2,298 skin lesion images from 1,373 patients in
+Brazil. Images of lesions were captured from smartphones and
+each image is associated with 21 tabular features, including the
+patient’s age, the anatomical region where the lesion is located,
+demographic information, and other characteristics of the legion,
+such as whether it itched, bled, or had grown. An overview of
+the clinical features can be found in Table IV. Further details
+can be found in [65].
+Skin lesions are classiﬁed as one of six different diagnoses,
+three of which are cancerous (Basal Cell Carcinoma, Squamous
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+IMRIE et al.: AUTOMATED ENSEMBLE MULTIMODAL MACHINE LEARNING FOR HEALTHCARE 4219
+Cell Carcinoma, and Melanoma) and three are non-cancerous
+(Actinic Keratosis, Melanocytic Nevus, and Seborrheic Ker-
+atosis). As is common in studies of skin lesions, there are
+substantial differences in the number of lesions with each di-
+agnosis (Table IV). Aggregating the diagnoses into cancerous
+and non-cancerous almost eliminates this class imbalance (47%
+cancerous, 53% non-cancerous). To demonstrate the suitability
+of our framework for balanced and imbalanced classiﬁcation
+scenarios, we explored predicting the speciﬁc diagnoses and the
+binary determination of whether a given lesion is cancerous. We
+assessed lesion categorization using accuracy (Acc.), balanced
+accuracy (Bal. Acc.), area under the receiver operating curve
+(AUROC), and macro F1 score, and assessed cancer diagnosis
+using accuracy, AUROC, F1 score, and Matthew’s correlation
+coefﬁcient (MCC). For each metric, a larger value corresponds to
+improved performance. Accuracy and balanced accuracy range
+from 0% to 100%, AUROC, F1 score and macro F1 score range
+from 0 to 1, and MCC ranges from −1t o1 .F o r m u l a ea r e
+provided in Appendix E.
+To account for the presence of multiple images for some pa-
+tients and the imbalance in the incidence of different diagnoses,
+we conducted 5-fold cross-validation with stratiﬁed sampling,
+ensuring all images from the same patient were contained in
+the same fold. Additionally, we used 20% of the training set of
+each fold to optimize hyperparameters and ensemble weights.
+13 clinical variables had substantial levels of missingness (c.
+35%) and this missingness was often strongly associated with
+diagnosis. Consequently, we retained only features without this
+missingness. We retained the six features with entries recorded
+as “unknown” (occurrence: 0.1%–17%), corresponding to the
+patient being asked the question but not knowing the answer.
+This resulted in eight tabular variables. Categorical variables
+were one-hot encoded, yielding 27 clinical features and one
+image for each sample.
+B. How Predictive is Each Modality in Isolation?
+Collecting additional information is never without expense,
+be it ﬁnancial, time, or even adverse effects of collecting the
+information. Thus it is critical to understand whether a modality
+is necessary and brings additional predictive power. Therefore,
+we ﬁrst used AutoPrognosis-M to optimize ML pipelines for
+each modality separately. Both the clinical variables and images
+exhibited some predictive power for lesion categorization and
+cancer diagnosis (Table I), with the best individual imaging
+models outperforming the tabular models, particularly for lesion
+categorization.
+Tabular: We tested several baseline classiﬁcation models
+covering a range of model classes, speciﬁcally linear models
+(Log. Reg. [28]), tree-based approaches (Random Forest [29],
+XGBoost [30], CatBoost [61]), and deep learning (MLP [31],
+TANGOS [32], TabTransformer [62], FT-Transformer [33]). We
+additionally assessed the performance of AutoPrognosis-M on
+just the tabular modality, which is equivalent to AutoProgno-
+sis[17]. Further details about the baseline models can be found
+in Section II-B1 , Appendix A, and the respective original pub-
+lications. Overall, AutoPrognosis outperformed any individualtabular model demonstrating the importance of AutoML and
+ensembling (Table I). However, the relative outperformance over
+the best models, such as FT-Transformer for cancer diagno-
+sis, was relatively minor, perhaps reﬂecting the nature of the
+structured information available.
+Imaging: The different imaging architectures displayed sig-
+niﬁcant variability in performance across the lesion categoriza-
+tion and cancer diagnosis prediction tasks; however, several
+trends could be observed. The vision transformer architec-
+tures (ViT and DINOv2) outperformed the CNN-based models
+(ResNet, EfﬁcientNet, MobileNet) almost universally across
+both tasks. One explanation beyond the model architecture could
+be the pretraining set, which differed between the transformer
+and CNN models (see Table III). Increasing the size of models
+typically led to improvements in performance for the trans-
+former models, although the largest models did not necessarily
+improve performance (e.g. DINOv2Large vs. DINOv2Base),
+while the trend was less clear for the CNN-based models. All
+model architectures consistently underperformed when trained
+from initialization, thus all results shown are from ﬁne-tuning
+pretrained models.
+Ensembling the best-performing image models resulted in a
+substantial increase in performance across all metrics for both
+prediction tasks. While the transformers outperformed the CNNs
+individually, many of the ensembles contained CNN-based ap-
+proaches, demonstrating the importance of diversity in ensemble
+learning.
+C. What Beneﬁt Does Multimodal ML Provide?
+We next sought to quantify what, if any, beneﬁt incorporating
+both modalities when issuing predictions provides. All three
+multimodal fusion strategies included in AutoPrognosis-M ex-
+hibited signiﬁcant improvements over the unimodal classiﬁers,
+demonstrating the importance of integrating data from multiple
+sources. In Table II, we report the best single model for each
+fusion strategy, together with the impact of ensembling the
+best-performing models (determined using the held-out portion
+of the training set). The impact of combining the modalities
+varied across the various model architectures, with the results
+also differing for each of the fusion strategies, late (Table V),
+early (Table VI), and joint (Table VII).
+Perhaps surprisingly, late fusion outperformed both early
+and joint fusion, with early fusion the worst-performing fu-
+sion approach. This is likely a consequence of the relatively
+strong predictive power of the tabular features and the number
+of samples available, but could also reveal the nature of the
+relationship between the two modalities. Again, ensembling
+the best-performing models for each fusion strategy provided
+a relatively small but consistent improvement, except for the
+cancer diagnosis task for late fusion, where the best individual
+model performed similarly to the ensemble.
+AutoPrognosis-M combines each fusion strategy and the uni-
+modal models via ensemble learning. This approach performed
+best across both tasks as measured by any metric, improving
+the performance over any one fusion approach alone. Despite
+late fusion outperforming the other multimodal and unimodal
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+4220 IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025
+Fig. 4. Selective acquisition of images based on conformal prediction. By acquiring images for around 20% of samples with the highest predicted
+uncertainty based on the tabular features, we capture over 60% of the improvement of the multimodal classiﬁer for (a)lesion categorization and
+(b)cancer diagnosis, respectively. We approach the performance of the multimodal classiﬁer by acquiring images for around half of all patients.
+(a)Lesion categorization. (b)Cancer diagnosis.
+approaches, it was not always selected as the most important
+component in the ensemble. Each fusion approach was given
+the largest weight in at least one ensemble, and the largest
+weight assigned to any of the ﬁve strategies (two unimodal, three
+fusion) in the multi-ensemble was 47%, further reinforcing the
+importance of diversity.
+D. When are Additional Modalities Most Helpful?
+While we have shown multimodal systems signiﬁcantly out-
+perform unimodal approaches for lesion categorization and
+cancer diagnosis, we might not require all modalities for all
+patients. As mentioned previously, there might be downsides
+to collecting additional information, thus identifying when we
+would beneﬁt is both important and often a key clinical decision,
+since modalities are typically acquired sequentially.
+We demonstrate how AutoPrognosis-M can be used to answer
+this question. We assumed access initially to the clinical features
+and wanted to identify for which patients to acquire an image
+of the lesion. We used conformal prediction to estimate the
+uncertainty of each prediction and chose to acquire images for
+the patients with the highest uncertainty.
+Acquiring images for around 20% of samples with the highest
+predicted uncertainty based on the tabular features captured
+almost two-thirds of the total improvement of the multimodal
+ensemble classiﬁer for the cancer diagnosis task (Fig. 4(b)) and
+over half for the lesion categorization task (Fig. 4(a)). Acquiring
+images for around 50% of patients approached the performance
+of the multimodal classiﬁer, thereby halving the number of
+images needed to be collected.
+E. Understanding the Information Provided by Each
+Modality
+Understanding why predictions were issued is incredibly
+important across medical contexts. We demonstrate how the
+interpretability techniques included in AutoPrognosis-M can
+be used to analyze the rationale for predictions across multi-
+ple modalities. We used integrated gradients [51] to analyzethe predictions from the image-only and joint fusion variants of
+EfﬁcientNetB4. An example is shown in Fig. 5.
+The image-only model incorrectly classiﬁed the lesion as
+Melanocytic Nevus (NEV, non-cancerous), while the joint fusion
+model correctly identiﬁed the lesion as Basal Cell Carcinoma
+(BCC, cancerous). The image attributions (Fig. 5center) both
+placed the most importance on the lesion, although there are
+minor differences in several areas. Importantly, the clinical vari-
+ables allowed the multimodal approach to correct the image-only
+prediction. NEV is typically asymptomatic [66]and more com-
+mon in younger individuals [67]. The patient reported the lesion
+had bled, hurt, and itched, which the multimodal model correctly
+identiﬁed made NEV less likely and increased the chance of
+BCC, offset by the relatively young age of the patient (32). This
+example clearly demonstrates the importance of incorporating
+both modalities and the understanding that XAI can provide.
+IV. D ISCUSSION
+Predictive modeling has the potential to support clinical
+decision-making and improve outcomes. However, incorporat-
+ing multiple types of data into computational approaches is not
+yet widespread in medicine and healthcare.
+In this paper, we demonstrated the utility of AutoPrognosis-M
+for developing clinical models from multimodal data using Au-
+toML. Our framework simpliﬁes the application of multimodal
+fusion strategies, automatically determining the best strategy
+for the available data and clinical application. We showed that
+AutoPrognosis-M can also be used to perform unimodal analysis
+for tabular and imaging data, enabling clinicians to understand
+when multimodal approaches will provide beneﬁt. Beyond pre-
+diction, we used uncertainty estimation to determine for which
+patients additional information is necessary and XAI to improve
+model understanding.
+While bespoke multimodal ML systems have been developed,
+few general-purpose frameworks exist. HAIM [68] is an early
+fusion approach using user-deﬁned pretrained feature-extraction
+models to extract representations that are concatenated and
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+IMRIE et al.: AUTOMATED ENSEMBLE MULTIMODAL MACHINE LEARNING FOR HEALTHCARE 4221
+Fig. 5. Comparison of explanations for unimodal and multimodal models using integrated gradients. The original image (left, img_id:
+PAT_521_984_412) together with attributions for the unimodal (center left) and joint fusion EfﬁcientNetB4 models (center right and right).
+passed to an XGBoost model. Wang et al. proposed a multimodal
+approach for esophageal variceal bleeding prediction [69].T h e y
+ﬁrst trained an imaging model and then used automated machine
+learning to develop a classiﬁer based on structured clinical
+data and the output of the imaging model. Finally, AutoGluon-
+Multimodal [70]enables ﬁne-tuning of pretrained models across
+multiple modalities, combining their outputs via late fusion.
+In contrast, AutoPrognosis-M incorporates multiple fusion ap-
+proaches, including both early and late fusion as possible strate-
+gies, while our experiments highlight the limitations of only
+considering a single fusion strategy.
+A signiﬁcant challenge with AutoML frameworks is balanc-
+ing the size of the search space, which can suffer from combina-
+torial explosion, with the computational cost required to search
+it. This is particularly apparent in the multimodal setting, where
+different fusion approaches represent an additional dimension
+over which to optimize. In our experiments, we managed this
+by restricting our search space to one approach for each of
+the three fusion strategies. However, many fusion approaches
+exist, in particular for joint fusion, and there is no guarantee that
+the approaches in our framework will always be optimal. To
+test this, we implemented an additional joint fusion approach,
+MetaBlock [71]. In general, the results were slightly weaker than
+our joint fusion approach, and constructing ensembles including
+the best-performing MetaBlock models did not improve the
+overall performance (Table VIII). Hence, while we believe our
+framework offers a balance between capturing a broad range
+of fusion strategies and the size of the search space, future
+work could investigate the impact of incorporating more fusion
+strategies.
+Our framework exploits pretrained vision models by ﬁne-
+tuning them on the available data. Recently, largely due to the
+size of large language models, parameter-efﬁcient ﬁne-tuning
+(PEFT) strategies, such as LoRA [72], have been proposed.
+While offering substantially faster training, full ﬁne-tuning has
+typically still been found to outperform PEFT [73]. Future work
+could explore the use of PEFT for multimodal approaches, in
+particular in the low sample regime.
+Finally, AutoML frameworks such as AutoPrognosis-M can
+aid in model development, but models must still be suitably val-
+idated to ensure they exhibit the desired characteristics, such as
+being accurate, reliable, and fair. As with any learning algorithm,
+signiﬁcant care must be taken by the user to ensure appropriate
+study design and data curation, without which an inaccurateor biased model could be developed which could have adverse
+effects on patient health.
+V. C ONCLUSION
+In this study, we introduced an AutoML framework for
+multimodal learning, AutoPrognosis-M. To the best of our
+knowledge, ours is the only framework that considers multiple
+classes of multimodal fusion, incorporating early, joint, and
+late fusion approaches. Our experiments demonstrated the im-
+portance of multimodal approaches in general, with the ﬁnal
+AutoPrognosis-M ensemble outperforming all unimodal and
+multimodal approaches. Notably, combining different multi-
+modal fusion approaches outperformed ensembles of different
+models employing the same fusion approach.
+While we demonstrated the application of AutoPrognosis-M
+to skin lesion diagnosis using smartphone images and clinical
+variables, our framework is generally applicable and can natu-
+rally be extended to additional modalities, models, and fusion
+strategies. We believe AutoPrognosis-M represents a powerful
+tool for clinicians and ML experts when working with data from
+multiple modalities and hope our framework aids the adoption
+of multimodal ML methods in healthcare.
+APPENDIX
+TRAINING AND EXPERIMENTAL DETAILS
+A. T abular
+Tabular models were trained from scratch on the training
+dataset. We trained logistic regression (Log. Reg.) [28], random
+forest [29], XGBoost [30], CatBoost [61], and MLP [31]models,
+using the implementations and hyperparameters from AutoProg-
+nosis [17]. We additionally conducted baselines of three recent
+deep learning models: TANGOS [32], TabTransformer [62], and
+FT-Transfomer [33]. TANGOS and FT-Transformer are out-
+lined in Section II-B1 . TabTransformer [62]uses a self-attention-
+based transformer to process the embeddings of categorical
+features before concatenating these embeddings with continuous
+features, which are then fed through an MLP. For TANGOS,
+we conducted a hyperparameter search using a grid search of
+the following values λ1∈{0.1,1,10},λ2∈{0.01,0.1}, and
+pdropout∈{0.0,0.1}and used the validation set for early stop-
+ping. All other hyperparameters are as described in the original
+publication [32]. We trained for a maximum of 200 epochs with
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+4222 IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025
+Fig. 6 Example-based explanation with SimplEx [52].The ﬁve examples with the highest weight are shown, together with several key variables
+and the diagnosis for each lesion. The diagnoses of the selected examples match the model prediction (see Fig. 5).
+TABLE III
+IMAGING MODELS INCLUDED IN AUTOPROGNOSIS -M.CNN -
+CONVOLUTIONAL NEURAL NETWORK .VIT-V ISION TRANSFORMER
+patience of 20 and a batch size of 50. For both TabTransformer
+and FT-Transformer, we again used a grid search to determine
+hyperparameters from the following values transformer layers
+∈{2,3},nheads∈{4,6,8}, andpfeed forward dropout ∈{0.0,0.1}.
+Other hyperparameters matched those suggested in the original
+publication, which in the case of TabTransformer was deter-
+mined via extensive search over ﬁve datasets. We used the
+validation set for early stopping, with a maximum of 200 epochs,
+patience of 25, and a batch size of 50.
+For AutoPrognosis, we conducted pipeline selection using
+an internal 4-fold cross-validation on each fold of the training
+dataset. Since age was the only non-binary clinical variable
+following one-hot encoding, we considered no feature scaling or
+min-max scaling and searched over ﬁve classiﬁers, namely lo-
+gistic regression [28], random forests [29], CatBoost [61], TAN-
+GOS [32] and FT-Transformer [33]. We set search parameters
+num _iter =1 0 ,num _study _iter =3. For the 6-way lesion
+classiﬁcation task, we optimized both pipelines and the tabular
+ensemble for macro F1 score, while for the binary cancer diag-
+nosis task we used AUROC. The ﬁnal tabular ensembles were
+constructed as weighted combinations of up to ﬁve pipelines.
+B. Imaging
+All imaging models were utilized in a pretrained manner,
+while DINOv2 was pretrained on the LVD-142 M dataset [42]
+and all other models on ImageNet [74]. We ﬁne-tuned the modelsTABLE IV
+CLINICAL VARIABLES IN THE PAD-UFES-20 D ATASET (N=2,298)
+in two stages. First, we froze the backbone and only trained
+the last fully connected layer with a learning rate of 1e-4 for
+50 epochs. In the second phase, we unfroze the backbone and
+continued training with a learning rate of 1e-6. We trained image
+models using weighted cross-entropy in the 6-class setup, and
+binary cross-entropy in the binary setup, and used early stopping
+with a patience of 20 on the validation loss.
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+IMRIE et al.: AUTOMATED ENSEMBLE MULTIMODAL MACHINE LEARNING FOR HEALTHCARE 4223
+TABLE V
+LATEFUSION SKINLESION CLASSIFICATION PERFORMANCE .THEBESTRESULT IS IN BOLD
+TABLE VI
+EARL Y FUSION SKINLESION CLASSIFICATION PERFORMANCE
+TABLE VII
+JOINT FUSION SKINLESION CLASSIFICATION PERFORMANCE
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+4224 IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025
+TABLE VIII
+METABLOCK [71]JOINT FUSION LESION CLASSIFICATION PERFORMANCE
+C. Fusion Strategies
+For both the early and late fusion experiments, we ﬁrst trained
+the vision models as described in Appendix A2. In late fusion,
+the predictions of the vision model and the tabular ensemble
+were averaged to obtain the ﬁnal prediction. For early and joint
+fusion strategies, we employed a two-layer fully connected MLP
+with 32 units in the hidden layer as the predictor, which takes
+as input both the extracted vision model features and the tabular
+features. For early fusion, we trained the MLP with a learning
+rate of 1e-4, applying early stopping with a patience of 20 based
+on validation loss. For the joint fusion strategy, we trained the
+entire pipeline end-to-end, initializing the imaging model as in
+Appendix A2. In this case, we initially trained the MLP classiﬁer
+for 50 epochs at a learning rate of 1e-4, and then reduced the
+learning rate to 1e-6 when unfreezing the backbone.
+D. Multimodal Ensembles
+We constructed the multimodal ensembles and the image-
+only ensemble using the following manner. For each fold, we
+constructed a weighted ensemble of the best ﬁve models, based
+on their performance of the validation set. We used Bayesian
+optimization for 50 trials to ﬁnd the weights that maximized
+the performance on the validation set. We maximized balanced
+accuracy for the 6-way lesion classiﬁcation task and AUROC
+for the binary cancer diagnosis task.
+E. Metrics
+The metrics used in our experiments are deﬁned as follows:
+Accuracy =TP+TN
+TP+TN +FP+FN
+Balanced Accuracy =1
+CC/summationdisplay
+i=1TPi
+TPi+FNi
+AUROC =/integraldisplay1
+0TPR (FPR−1(x))dxF1 score =2TP
+2TP+FP+FN
+Macro F1 score =1
+CC/summationdisplay
+i=1F1 score i
+MCC =TP·TN−FP·FN/radicalbig
+(TP+FP)(TP+FN)(TN +FP)(TN +FN),
+whereCis the number of classes, TPandFPare the number
+of true and false positives, respectively, TN andFN are the
+number of true and false negatives, respectively, TPi,FN iare
+the number of true positives and false negatives for class i,
+respectively, TPR is the true positive rateTP
+TP+FN,FPR is
+the false positive rateFP
+FP+TN, and F1 score iis the per-class F1
+score for class i.
+F . Uncertainty Quantiﬁcation
+To determine for which patients to acquire additional informa-
+tion (see Fig. 4), we used conformal prediction to estimate uncer-
+tainty. Speciﬁcally, we applied regularized adaptive prediction
+sets (RAPS) [60] to the predictions from the tabular ensemble
+model. For each fold, we used the validation set to calibrate
+predictions. Due to the low number of classes (six and two for the
+lesion classiﬁcation and cancer prediction tasks, respectively),
+we setkreg=0and used a default value for λ=0.01.W ev a r i e d
+the desired coverage 1−αand acquired more information for
+any individual with a prediction set including more than one
+label. For individuals with only one label in the prediction set,
+we use the original prediction of the tabular model. For those
+with more than one label, we use the prediction from the ﬁnal
+multimodal ensemble constructed by AutoPrognosis-M.
+G. Example-Based Model Explanation
+We also used SimplEx [52] to analyze the same example as
+in Section III-E , using the 50 most similar latent representations
+from the training set as the corpus. For the image-only model,
+while eight of the ten most similar images were also from the
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+IMRIE et al.: AUTOMATED ENSEMBLE MULTIMODAL MACHINE LEARNING FOR HEALTHCARE 4225
+nose or face, the most similar age was over 20 years older than the
+individual in question, and none matched their clinical variables,
+ultimately resulting in an incorrect prediction. In contrast, the
+diagnoses of the ﬁve examples selected for the joint fusion model
+matched the prediction, with four being very close in age and the
+clinical variables much more closely matching the test patient,
+including an exact match (Fig. 6), demonstrating the importance
+of incorporating data from both modalities.
+ACKNOWLEDGMENT
+This work was primarily conducted while at the University of
+California, Los Angeles.
+REFERENCES
+[1] M. D. Abràmoff, P. T. Lavin, M. Birch, N. Shah, and J. C. Folk, “Pivotal
+trial of an autonomous AI-based diagnostic system for detection of diabetic
+retinopathy in primary care ofﬁces,” NPJ Digit. Med. , vol. 1, no. 1, 2018,
+Art. no. 39.
+[2] P. Rajpurkar, E. Chen, O. Banerjee, and E. J. Topol, “AI in health and
+medicine,” Nat. Med. , vol. 28, no. 1, pp. 31–38, 2022.
+[3] A. Kline et al., “Multimodal machine learning in precision health: A
+scoping review,” NPJ Digit. Med. , vol. 5, no. 1, Nov. 2022, Art. no. 171.
+[4] S.-C. Huang, A. Pareek, S. Seyyedi, I. Banerjee, and M. P. Lungren,
+“Fusion of medical imaging and electronic health records using deep
+learning: A systematic review and implementation guidelines,” NPJ Digit.
+Med. , vol. 3, no. 1, 2020, Art. no. 136.
+[5] A. Leslie and P. R. Jones, and A. J. Goddard, “The inﬂuence of clinical
+information on the reporting of CT by radiologists,” Brit. J. Radiol. , vol. 73,
+no. 874, pp. 1052–1055, 2000.
+[6] C. Castillo, T. Steffens, L. Sim, and L. Caffery, “The effect of clinical
+information on radiology reporting: A systematic review,” J. Med. Radiat.
+Sci., vol. 68, no. 1, pp. 60–74, 2021.
+[7] W. W. Boonn and C. P. Langlotz, “Radiologist use of and perceived need
+for patient data access,” J. Digit. Imag. , vol. 22, no. 4, pp. 357–362, 2009.
+[8] M. Y. Wang, S. Asanad, K. Asanad, R. Karanjia, and A. A. Sadun, “Value
+of medical history in ophthalmology: A study of diagnostic accuracy,” J.
+Curr. Ophthalmol. , vol. 30, no. 4, pp. 359–364, 2018.
+[9] M. J. Ombrello, K. A. Sikora, and D. L. Kastner, “Genetics, genomics,
+and their relevance to pathology and therapy,” Best Pract. Res.: Clin.
+Rheumatol. , vol. 28, no. 2, pp. 175–189, 2014.
+[10] M. Bergenmar, J. Hansson, and Y. Brandberg, “Detection of nodular and
+superﬁcial spreading melanoma with tumour thickness ≤2.0mm - an
+interview study,” Eur. J. Cancer Prev. , vol. 11, no. 1, pp. 49–55, 2002.
+[11] P. Li, Y. Hu, and Z.-P. Liu, “Prediction of cardiovascular diseases by
+integrating multi-modal features with machine learning methods,” Biomed.
+Signal Process. Control , vol. 66, 2021, Art. no. 102474.
+[12] Y. Liu et al., “A deep learning system for differential diagnosis of skin
+diseases,” Nat. Med. , vol. 26, no. 6, pp. 900–908, 2020.
+[13] A. Yala, C. Lehman, T. Schuster, T. Portnoi, and R. Barzilay, “A deep
+learning mammography-based model for improved breast cancer risk
+prediction,” Radiol. , vol. 292, no. 1, pp. 60–66, 2019.
+[14] T. Kyono, F. J. Gilbert, and M. van der Schaar, “Improving workﬂow
+efﬁciency for mammography using machine learning,” J. Amer. College
+Radiol. , vol. 17, no. 1, pp. 56–63, 2020.
+[15] J. Wu et al., “Radiological tumour classiﬁcation across imaging modality
+and histology,” Nat. Mach. Intell. , vol. 3, no. 9, pp. 787–798, 2021.
+[16] T. Callender and M. van der Schaar, “Automated machine learning as
+a partner in predictive modelling,” Lancet Digit. Health , vol. 5, no. 5,
+pp. e254–e256, 2023.
+[17] F. Imrie, B. Cebere, E. F. McKinney, and M. van der Schaar, “AutoProgno-
+sis 2.0: Democratizing diagnostic and prognostic modeling in healthcare
+with automated machine learning,” PLoS Digit. Health , vol. 2, no. 6, 2023,
+Art. no. e0000276.
+[18] A. M. Alaa, T. Bolton, E. Di Angelantonio, J. H. F. Rudd, and M. van der
+Schaar, “Cardiovascular disease risk prediction using automated machine
+learning: A prospective study of 423,604 u.k. biobank participants,” PLoS
+One, vol. 14, no. 5, pp. 1–17, 2019.
+[19] A. M. Alaa and M. van der Schaar, “Prognostication and risk factors for
+cystic ﬁbrosis via automated machine learning,” Sci. Rep. , vol. 8, no. 1,
+Jul. 2018, Art. no. 11242.[20] A. M. Alaa, D. Gurdasani, A. L. Harris, J. Rashbass, and M. van der Schaar,
+“Machine learning to guide the use of adjuvant therapies for breast cancer,”
+Nat. Mach. Intell. , vol. 3, no. 8, pp. 716–726, Aug. 2021.
+[21] T. Callender et al., “Assessing eligibility for lung cancer screening using
+parsimonious ensemble machine learning models: A development and
+validation study,” PLoS Med. , vol. 20, no. 10, 2023, Art. no. e1004287.
+[22] F. Imrie, P. Rauba, and M. van der Schaar, “Redeﬁning digital health
+interfaces with large language models,” 2023, arXiv:2310.03560 .
+[23] M. Feurer, A. Klein, K. Eggensperger, J. Springenberg, M. Blum, and F.
+Hutter, “Efﬁcient and robust automated machine learning,” in Proc. Adv.
+Neural Inf. Process. Syst. , 2015, pp. 2755–2763.
+[24] C. Thornton, F. Hutter, H. H. Hoos, and K. Leyton-Brown, “Auto-WEKA:
+Combined selection and hyperparameter optimization of classiﬁcation
+algorithms,” in Proc. Int. Conf. Knowl. Discov. Data Mining , 2013,
+pp. 847–855.
+[25] R. S. Olson and J. H. Moore, “TPOT: A tree-based pipeline optimization
+tool for automating machine learning,” in Proc. Int. Conf. Mach. Learn.
+Workshop , 2016, pp. 66–74.
+[26] F. Imrie, R. Davis, and M. van der Schaar, “Multiple stakeholders drive
+diverse interpretability requirements for machine learning in healthcare,”
+Nat. Mach. Intell. , vol. 5, no. 8, pp. 824–829, Aug. 2023.
+[27] J. Waring, C. Lindvall, and R. Umeton, “Automated machine learning:
+Review of the state-of-the-art and opportunities for healthcare,” Artif.
+Intell. Med. , vol. 104, 2020, Art. no. 101822.
+[28] S. H. Walker and D. B. Duncan, “Estimation of the probability of an event
+as a function of several independent variables,” Biometrika , vol. 54, no. 1/2,
+pp. 1 67–179, 1967.
+[29] L. Breiman, “Random forests,” Mach. Learn. , vol. 45, pp. 5–32, 2001.
+[30] T. Chen and T. He, “XGBoost: Extreme gradient boosting,” R Package
+Version 0.4-2 , 2015.
+[31] F. Rosenblatt, “The perceptron: A probabilistic model for information
+storage and organization in the brain,” Psychol. Rev. , vol. 65, no. 6, 1958,
+Art. no. 386.
+[32] A. Jeffares, T. Liu, J. Crabbé, F. Imrie, and M. van der Schaar, “TANGOS:
+Regularizing tabular neural networks through gradient orthogonalization
+and specialization,” in Proc. Int. Conf. Learn. Representations , 2023.
+[33] Y. Gorishniy, I. Rubachev, V. Khrulkov, and A. Babenko, “Revisiting deep
+learning models for tabular data,” in Proc. Adv. Neural Inf. Proc. Syst. ,
+2021, pp. 18932–18943.
+[34] G. James, D. Witten, T. Hastie, R. Tibshirani, and J. Taylor, An Introduction
+to Statistical Learning , Berlin, Germany: Springer, 2023.
+[35] Y. LeCun, K. Kavukcuoglu, and C. Farabet, “Convolutional networks and
+applications in vision,” in Proc. 2010 IEEE Int. Symp. Circuits Syst. , 2010,
+pp. 253–256.
+[36] A. Dosovitskiy et al., “An image is worth 16x16 words: Transformers for
+image recognition at scale,” in Proc. Int. Conf. Learn. Representations ,
+2021.
+[37] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image
+recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. , 2016,
+pp. 770–778.
+[38] M. Tan and Q. Le, “EfﬁcientNet: Rethinking model scaling for con-
+volutional neural networks,” in Proc. Int. Conf. Mach. Learn. , 2019,
+pp. 6105–6114.
+[39] M. Sandler, A. Howard, M. Zhu, A. Zhmoginov, and L.-C. Chen, “Mo-
+bileNetV2: Inverted residuals and linear bottlenecks,” in Proc. IEEE Conf.
+Comput. Vis. Pattern Recognit. , 2018, pp. 4510–4520.
+[40] K. Weiss, T. M. Khoshgoftaar, and D. Wang, “A survey of transfer
+learning,” J. Big Data , vol. 3, pp. 1–40, 2016.
+[41] F. Zhuang et al., “A comprehensive survey on transfer learning,” Proc.
+IEEE , vol. 109, no. 1, pp. 43–76, Jan. 2021.
+[42] M. Oquab et al., “DINOv2: Learning robust visual features without super-
+vision,” Trans. Mach. Learn. Res. , 2024.
+[43] T. Baltrušaitis, C. Ahuja, and L.-P. Morency, “Multimodal machine learn-
+ing: A survey and taxonomy,” IEEE Trans. Pattern Anal. Mach. Intell. ,
+vol. 41, no. 2, pp. 423–443, Feb. 2019.
+[44] S. Y. Boulahia, A. Amamra, M. R. Madi, and S. Daikh, “Early, intermediate
+and late fusion strategies for robust deep learning-based multimodal action
+recognition,” Mach. Vis. Appl. , vol. 32, no. 6, 2021, Art. no. 121.
+[45] S. R. Stahlschmidt, B. Ulfenborg, and J. Synnergren, “Multimodal deep
+learning for biomedical data fusion: A review,” Brief. Bioinform. , vol. 23,
+no. 2, 2022, Art. no. bbab569.
+[46] R. Sharma, V. I. Pavlovic, and T. S. Huang, “Toward multimodal human-
+computer interface,” Proc. IEEE , vol. 86, no. 5, pp. 853–869, May 1998.
+[47] A. Krogh and J. Vedelsby, “Neural network ensembles, cross validation,
+and active learning,” in Proc. Adv. Neural Inf. Process. Syst. , 1994,
+pp. 231–238.
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply. 
+4226 IEEE JOURNAL OF BIOMEDICAL AND HEALTH INFORMATICS, VOL. 29, NO. 6, JUNE 2025
+[48] T. Akiba, S. Sano, T. Yanase, T. Ohta, and M. Koyama, “Optuna: A next-
+generation hyperparameter optimization framework,” in Proc. Int. Conf.
+Knowl. Discov. Data Mining , 2019, pp. 2623–2631.
+[49] Medicines & Healthcare products Regulatory Agency, “Software and AI as
+a medical device change programme - Roadmap,” 2023, Accessed: 14 Jun.
+2023. [Online]. Available: https://www.gov.uk/government/publications/
+software-and-ai-as-a-medical-device-change-programme/software-
+and-ai-as-a-medical-device-change-programme-roadmap
+[50] S. M. Lundberg and S.-I. Lee, “A uniﬁed approach to interpreting model
+predictions,” in Proc. Adv. Neural Inf. Process. Syst. , 2017, pp. 4768–4777.
+[51] M. Sundararajan, A. Taly, and Q. Yan, “Axiomatic attribution for deep
+networks,” in Proc. Int. Conf. Mach. Learn. , 2017, pp. 3319–3328.
+[52] J. Crabbe, Z. Qian, F. Imrie, and M. van der Schaar, “Explaining latent
+representations with a corpus of examples,” in Proc. Adv. Neural Inf.
+Process. Syst. , 2021, pp. 12154–12166.
+[53] B. Kompa, J. Snoek, and A. L. Beam, “Second opinion needed: Communi-
+cating uncertainty in medical machine learning,” NPJ Digit. Med. ,v o l .4 ,
+no. 1, 2021, Art. no. 4.
+[54] M. A. Helou, D. DiazGranados, M. S. Ryan, and J. W. Cyrus, “Uncertainty
+in decision making in medicine: A scoping review and thematic analysis
+of conceptual models,” Acad. Med. , vol. 95, no. 1, pp. 157–165, 2020.
+[55] V. Vovk, A. Gammerman, and G. Shafer, Algorithmic Learning in a
+Random World , Berlin, Germany: Springer, 2005.
+[56] V. Vovk, “Conditional validity of inductive conformal predictors,” in Proc.
+Asian Conf. Mach. Learn. , 2012, pp. 475–490.
+[57] H. Papadopoulos, V. Vovk, and A. Gammerman, “Regression confor-
+mal prediction with nearest neighbours,” J. Artif. Intell. Res. , vol. 40,
+pp. 815–840, 2011.
+[58] U. Johansson, C. Sönströd, and H. Linusson, “Efﬁcient conformal regres-
+sors using bagged neural nets,” in Proc. Int. Joint Conf. Neural Netw. ,
+2015, pp. 1–8.
+[59] N. Seedat, A. Jeffares, F. Imrie, and M. van der Schaar, “Improving
+adaptive conformal prediction using self-supervised learning,” in Proc.
+26th Int. Conf. Artif. Intell. Statist. , 2023, pp. 10160–10177.
+[60] A. Angelopoulos, S. Bates, J. Malik, and M. I. Jordan, “Uncertainty sets
+for image classiﬁers using conformal prediction,” in Proc. Int. Conf. Learn.
+Representations , 2021.
+[61] L. Prokhorenkova, G. Gusev, A. Vorobev, A. V. Dorogush, and A. Gulin,
+“CatBoost: Unbiased boosting with categorical features,” in Proc. Adv.
+Neural Inf. Proc. Sys. , 2018, pp. 6639–6649.[62] X. Huang, A. Khetan, M. Cvitkovic, and Z. Karnin, “TabTrans-
+former: Tabular data modeling using contextual embeddings,” 2020,
+arXiv:2012.06678 .
+[63] G. Argenziano, G. Fabbrocini, P. Carli, V. De Giorgi, E. Sammarco, and
+M. Delﬁno, “Epiluminescence microscopy for the diagnosis of doubtful
+melanocytic skin lesions: Comparison of the ABCD rule of dermatoscopy
+and a new 7-point checklist based on pattern analysis,” Arch. Dermatol. ,
+vol. 134, no. 12, pp. 1563–1570, 1998.
+[64] N. R. Abbasi et al., “Early diagnosis of cutaneous melanoma: Revisiting
+the ABCD criteria,” JAMA , vol. 292, no. 22, pp. 2771–2776, 2004.
+[65] A. G. Pacheco et al., “PAD-UFES-20: A skin lesion dataset composed of
+patient data and clinical images collected from smartphones,” Data Brief ,
+vol. 32, 2020, Art. no. 106221.
+[66] P. Macneal and B. C. Patel, Congenital Melanocytic Nevi . Treasure Island,
+FL, USA: StatPearls Publishing, 2020.
+[67] I. Zalaudek et al., “Frequency of dermoscopic nevus subtypes by age
+and body site: A cross-sectional study,” Arch. Dermatol. , vol. 147, no. 6,
+pp. 663–670, 2011.
+[68] L. R. Soenksen et al., “Integrated multimodal artiﬁcial intelligence frame-
+work for healthcare applications,” NPJ Digit. Med. , vol. 5, no. 1, Sep. 2022,
+Art. no. 149.
+[69] Y. Wang et al., “Automated multimodal machine learning for esophageal
+variceal bleeding prediction based on endoscopy and structured data,” J.
+Digit. Imag. , vol. 36, no. 1, pp. 326–338, Feb. 2023.
+[70] Z. Tang et al., “AutoGluon-Multimodal (AutoMM): Supercharging mul-
+timodal AutoML with foundation models,” in Proc. Int. Conf. Automated
+Mach. Learn. , 2024, pp. 1–35. [Online]. Available: https://proceedings.
+mlr.press/v256/tang24a.html
+[71] A. G. Pacheco and R. A. Krohling, “An attention-based mechanism to
+combine images and metadata in deep learning models applied to skin
+cancer classiﬁcation,” IEEE J. Biomed. Health Inform. , vol. 25, no. 9,
+pp. 3554–3563, Sep. 2021.
+[72] E. J. Hu et al., “LoRA: Low-rank adaptation of large language models,”
+inProc. Int. Conf. Learn. Representations , 2022.
+[73] D. Biderman et al., “LoRA learns less and forgets less,” Trans. Mach.
+Learn. Res. , 2024.
+[74] J. Deng, W. Dong, R. Socher, L.-J. Li, K. Li, and L. Fei-Fei, “ImageNet:
+A large-scale hierarchical image database,” in Proc. IEEE Conf. Comput.
+Vis. Pattern Recognit. , 2009, pp. 248–255.
+Authorized licensed use limited to: Mukesh Patel School of Technology & Engineering. Downloaded on October 07,2025 at 05:30:43 UTC from IEEE Xplore.  Restrictions apply.
